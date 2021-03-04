@@ -1,0 +1,5 @@
+.sidebar {
+  flex-grow: 0;
+  width: 58px;
+  background-color: #333333;
+}

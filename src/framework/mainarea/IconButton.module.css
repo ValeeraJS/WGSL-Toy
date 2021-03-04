@@ -1,0 +1,24 @@
+.iconbutton {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ccc;
+    transition-duration: 0.3s;
+}
+
+.iconbutton span{
+    transition-duration: 0.3s;
+}
+
+.iconbutton:hover {
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.35);
+    color: #d2d2d2;
+}
+
+.iconbutton:hover span{
+    color: #ffffff;
+}

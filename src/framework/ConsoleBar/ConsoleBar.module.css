@@ -1,0 +1,22 @@
+.consolebar {
+  background-color: #1e1e1e;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.titleline {
+  height: 40px;
+  flex-grow: 0;
+  color: #e7e7e7;
+  line-height: 40px;
+  padding-left: 18px;
+}
+
+.messagebox {
+  flex-grow: 1;
+  color: #cccccc;
+  padding-left: 18px;
+  overflow: auto;
+}
