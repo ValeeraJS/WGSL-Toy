@@ -99,7 +99,7 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
                             className={styles.renameinput}
                             onBlur={this.finishEdit}
                             onChange={this.changeName} />
-                        : <>{name || 'Untitled'}</>
+                        : <>{name || 'Untitled.wgsl'}</>
                 }
             </span>
         </Dropdown >;
@@ -222,7 +222,7 @@ export default class PageTabs extends Component {
         activeKey: '1',
         panes: [
             {
-                title: <TabTitle name="Hello World" keyId="1"
+                title: <TabTitle name="Hello World.wgsl" keyId="1"
                     onCloseRight={this.onCloseRight}
                     onCloseOther={this.onCloseOther}
                     onDel={this.remove}

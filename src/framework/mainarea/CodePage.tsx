@@ -7,22 +7,25 @@ import Renderer from "../../engine/renderer.js";
 import { GeometryNode, Geometry } from "../../engine/geometry.js";
 import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
+import { setMsgOut } from "../ConsoleBar/ConsoleBar";
 
 let f32BufferArray = new Float32Array([0, 0, 0, 0, 0]);
 
 export { f32BufferArray };
 
-const options = {
-    selectOnLineNumbers: true,
-    automaticLayout: true
-};
+// const options = {
+//     selectOnLineNumbers: true,
+//     automaticLayout: true
+// };
+
 let material: Material;
 let mesh: Mesh;
 
 export async function init(canvas: any) {
     const adapter = await navigator.gpu?.requestAdapter();
     if (!adapter) {
-        throw Error('WebGPU not support')
+        setMsgOut("Your browser doesn't support WebGPU, please use newest Chrome Canary.");
+        return () => {};
     }
     const device = await adapter.requestDevice();
     const renderer = new Renderer(device, canvas);
