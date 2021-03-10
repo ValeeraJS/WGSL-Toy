@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import Dropzone from 'react-dropzone';
 
 import F32Buffer from "../../engine/buffer.js";
-import Renderer from "../../engine/renderer.js";
+import Renderer from "../../engine/renderer";
 import { GeometryNode, Geometry } from "../../engine/geometry.js";
 import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
@@ -28,6 +28,10 @@ export async function init(canvas: any) {
         return () => {};
     }
     const device = await adapter.requestDevice();
+    if (!device) {
+        setMsgOut("Your browser doesn't support WebGPU, please use newest Chrome Canary.");
+        return () => {};
+    }
     const renderer = new Renderer(device, canvas);
 
     // 顶点位置数据

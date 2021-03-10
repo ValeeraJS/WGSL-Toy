@@ -1,6 +1,3 @@
-/// <reference types="@webgpu/types" />
-/// <reference types="webgpu-shader-module-transform" />
-
 declare module '*.module.css' {
   const styles: { [className: string]: string };
   export default styles;
