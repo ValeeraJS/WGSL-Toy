@@ -8,7 +8,9 @@ function Sidebar() {
     <div className={styles.sidebar}>
       <BarIconButton icon={<GithubOutlined style={{
         fontSize: 40
-      }}/>} tip="Go to Github repository page"></BarIconButton>
+      }}/>} tip="Go to Github repository page" onClick={()=>{
+        window.open('https://github.com/ValeeraJS/WGSL-Toy', '_blank');
+      }}></BarIconButton>
     </div>
   );
 }

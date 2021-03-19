@@ -256,7 +256,6 @@ export default class CodePage extends Component<CodePageProps> {
 
     updateCode = (code: string = '') => {
         this.setState({ code });
-        // updateMaterialShader(code);
     }
 
     render() {
@@ -266,7 +265,6 @@ export default class CodePage extends Component<CodePageProps> {
                     let reader = new FileReader();
                     reader.readAsText(files[0]);
                     reader.onload = () => {
-                        console.log(reader.result, this)
                         this.updateCode(reader.result as string || '');
                     };
                 }

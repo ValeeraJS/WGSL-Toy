@@ -46,7 +46,7 @@ export default class Renderer {
 
     render(mesh: any, mouseArray: Float32Array) {
         let pipeline = mesh.pipeline || mesh.updatePipeline().pipeline;
-
+        (window as any).p = pipeline;
         this.device.queue.writeBuffer(
             mesh.uniformBuffer,
             0,

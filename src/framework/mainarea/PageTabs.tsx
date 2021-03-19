@@ -123,7 +123,13 @@ export default class PageTabs extends Component {
     };
 
     // 添加代码页
-    add = (key: string = '', tabName: string = '', code: string = '') => {
+    add = (key: string = '', tabName: string = '', code: string = `[[location(0)]] var<out> fragColor : vec4<f32>;
+
+[[stage(fragment)]] fn main() -> void {
+    fragColor = vec4<f32>(0.0, 0.0, 0.0, 1.0);
+    return;
+}
+`) => {
         const { panes } = this.state;
         const activeKey = key + `${Date.now()}`;
         const newPanes = [...panes];
@@ -139,7 +145,7 @@ export default class PageTabs extends Component {
             key: activeKey,
             ref: tmpRef
         });
-        updateMaterialShader('');
+        updateMaterialShader(code);
         this.setState({
             panes: newPanes,
             activeKey,

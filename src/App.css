@@ -106,7 +106,28 @@
   background-color: #6f6f6f !important;
   margin: 4px 10px !important;
 }
-
+/*  */
 .ant-dropdown-trigger {
   height: 24px !important;
+}
+
+.ant-tree {
+  color:rgba(255, 255, 255, 0.85) !important;
+  background-color: transparent !important;
+}
+
+.ant-tree.ant-tree-directory/*  */ .ant-tree-treenode:hover::before{
+  background-color: #2d2d2e !important;
+}
+
+.ant-tree.ant-tree-directory .ant-tree-treenode-selected::before {
+  background-color: #373739 !important;
+}
+
+.ant-tree.ant-tree-directory:hover .ant-tree-treenode-selected::before {
+  background-color: #373739 !important;
+}
+
+.ant-tree-switcher {
+  display: none !important;
 }
