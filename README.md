@@ -2,6 +2,8 @@
 
 A playground of WebGPU.
 
+Live demo: https://valeerajs.github.io/WGSL-Toy/build/
+
 ## Features
 
 1. support code highlight
