@@ -198,6 +198,7 @@ function handleEditorBeforeMount(monaco: any) {
         digits: /\d+(_+\d+)*/,
         tokenizer: {
             root: [
+                [/\/\/[^\n]*/, 'comment'],
                 [
                     /[a-zA-Z_$<>][\w<>$]*/,
                     {
@@ -215,16 +216,6 @@ function handleEditorBeforeMount(monaco: any) {
                 [/(@digits)\.(@digits)([eE][-+]?(@digits))?[fFdD]?/, 'number'],
                 [/(@digits)[fFdD]/, 'number'],
                 [/(@digits)[lL]?/, 'number'],
-            ],
-            whitespace: [
-                [/[ \t\r\n]+/, ''],
-                [/\/\*/, 'comment', '@comment'],
-                [/\/\/.*$/, 'comment']
-            ],
-            comment: [
-                [/[^/*]+/, 'comment'],
-                [/\*\//, 'comment', '@pop'],
-                [/[/*]/, 'comment']
             ],
         }
     });
