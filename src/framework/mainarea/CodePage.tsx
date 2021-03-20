@@ -143,6 +143,10 @@ function handleEditorBeforeMount(monaco: any) {
             'true',
             'false',
             'var',
+            'var<in>',
+            'var<out>',
+            'var<uniform>',
+            'var',
             'fn',
             'location',
             'offset',
@@ -152,6 +156,14 @@ function handleEditorBeforeMount(monaco: any) {
             'group',
             'stage'
         ],
+        ctypes: [
+            'vec2<f32>',
+            'vec3<f32>',
+            'vec4<f32>',
+            'mat2x2<f32>',
+            'mat3x3<f32>',
+            'mat4x4<f32>',
+        ],
         types: [
             'in',
             'out',
@@ -160,39 +172,47 @@ function handleEditorBeforeMount(monaco: any) {
             'i32',
             'f32',
             'i32',
-            'vec2',
-            'vec3',
-            'vec4',
-            'vec4',
-            'mat2x2',
-            'mat3x3',
-            'mat4x4',
+            
             'texture_2d',
             'Uniforms'
+        ],
+        funcs: [
+            'abs',
+            'clamp',
+            'cos',
+            'cross',
+            'distance',
+            'dot',
+            'length',
+            'normalize',
+            'sin',
+            'smoothStep'
         ],
         special: [
             'return',
             'fragment',
             'vertex'
         ],
-        symbols: /[=><!~?:&|+\-*\/\^%]+/,
+        symbols: /[=><!~?:&|+\-*/^%]+/,
         escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
         digits: /\d+(_+\d+)*/,
         tokenizer: {
             root: [
                 [
-                    /[a-zA-Z_$][\w$]*/,
+                    /[a-zA-Z_$<>][\w<>$]*/,
                     {
                         cases: {
+                            '@ctypes': 'types',
                             '@keywords': { token: 'keyword.$0' },
                             '@types': 'types',
+                            '@funcs': 'funcs',
                             '@special': 'special',
                             '@default': 'identifier',
                         }
                     }
                 ],
-                [/(@digits)[eE]([\-+]?(@digits))?[fFdD]?/, 'number'],
-                [/(@digits)\.(@digits)([eE][\-+]?(@digits))?[fFdD]?/, 'number'],
+                [/(@digits)[eE]([-+]?(@digits))?[fFdD]?/, 'number'],
+                [/(@digits)\.(@digits)([eE][-+]?(@digits))?[fFdD]?/, 'number'],
                 [/(@digits)[fFdD]/, 'number'],
                 [/(@digits)[lL]?/, 'number'],
             ],
@@ -202,9 +222,9 @@ function handleEditorBeforeMount(monaco: any) {
                 [/\/\/.*$/, 'comment']
             ],
             comment: [
-                [/[^\/*]+/, 'comment'],
+                [/[^/*]+/, 'comment'],
                 [/\*\//, 'comment', '@pop'],
-                [/[\/*]/, 'comment']
+                [/[/*]/, 'comment']
             ],
         }
     });
@@ -215,6 +235,7 @@ function handleEditorBeforeMount(monaco: any) {
         inherit: true,
         rules: [
             // { token: 'identifier', foreground: 'dcdc9d' },
+            { token: 'funcs', foreground: 'd0dcaa' },
             { token: 'types', foreground: '4ec9b0' },
             { token: 'special', foreground: 'c582b6' },
             { token: 'number', foreground: 'b5c078' },
