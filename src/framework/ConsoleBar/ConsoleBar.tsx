@@ -21,9 +21,9 @@ export default function ConsoleBar() {
         </div>
         <div className={styles.messagebox}>
             {
-                msg.split('\n').map((line, index) => {
+                typeof msg === "string" ? msg.split('\n').map((line, index) => {
                     return <div key={index}>{line}</div>;
-                })
+                }): msg
             }
         </div>
     </div>);

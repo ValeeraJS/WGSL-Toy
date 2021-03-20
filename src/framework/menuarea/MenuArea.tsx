@@ -24,6 +24,20 @@ const treeData = [
       { title: "3. circle moving", key: "0-1-2", isLeaf: true },
     ],
   },
+  {
+    title: "Noise",
+    key: "0-2",
+    children: [
+      { title: "1. smoke", key: "0-2-0", isLeaf: true },
+    ],
+  },
+  {
+    title: "Fractal",
+    key: "0-3",
+    children: [
+      { title: "1. fantasy tunnel", key: "0-3-0", isLeaf: true },
+    ],
+  }
 ];
 
 const onSelect = (keys: React.Key[], info: any) => {

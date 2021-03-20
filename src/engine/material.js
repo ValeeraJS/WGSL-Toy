@@ -1,6 +1,7 @@
 import {setMsgOut} from '../framework/ConsoleBar/ConsoleBar';
 
 function DEBUG(device, source) {
+    let startTime = Date.now();
     device.pushErrorScope('validation');
     const shaderModule = device.createShaderModule({
         code: source,
@@ -10,7 +11,11 @@ function DEBUG(device, source) {
         if (err) {
             setMsgOut(err.message);
         } else {
-            setMsgOut('success');
+            let time = Date.now() - startTime;
+            setMsgOut(<div>
+                <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
+                <div>Compiled in {time} ms.</div>
+            </div>);
         }
     });
 
