@@ -28,10 +28,10 @@ fn main() -> void {
     c = c / f32(MAX_ITER);
     c = 1.0 - pow(c, 2.0);
     var cc: f32 = pow(abs(c), 12.0);
-    var colour: vec3<f32> = vec3<f32>(cc, cc, cc);
-    colour = clamp(colour, vec3<f32>(0.0, 0.0, 0.0), vec3<f32>(1.0, 1.0, 1.0));
+    var color: vec3<f32> = vec3<f32>(cc, cc, cc);
+    color = clamp(color, vec3<f32>(0.0, 0.0, 0.0), vec3<f32>(1.0, 1.0, 1.0));
     
     var tint: vec3<f32>= vec3<f32>(uv.x, uv.y, (1.0 - uv.x) * (1.0 - uv.y) );
-    fragColor = vec4<f32>(colour * tint, 1.0);
+    fragColor = vec4<f32>(color * tint, 1.0);
     return;
 }
