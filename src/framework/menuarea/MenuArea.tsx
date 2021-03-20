@@ -29,6 +29,7 @@ const treeData = [
     key: "0-2",
     children: [
       { title: "1. smoke", key: "0-2-0", isLeaf: true },
+      { title: "2. cloud", key: "0-2-1", isLeaf: true },
     ],
   },
   {
