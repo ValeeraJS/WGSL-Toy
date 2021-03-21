@@ -7,15 +7,15 @@
 [[location(0)]] var<out> fragColor : vec4<f32>;
 
 
-fn sdfSquare(uv: vec2<f32>, center: vec2<f32>, radius: f32) -> f32 {
-    return max(abs(uv.x - center.x), abs(uv.y - center.y)) - radius;
+fn sdfEllipse(uv: vec2<f32>, f1: vec2<f32>, f2: vec2<f32>, a: f32) -> f32 {
+    return length(uv - f1) + length(uv - f2) - a;
 }
 
 [[stage(fragment)]] fn main() -> void {
     var aspect: f32 = uniforms.resolution.y / uniforms.resolution.x;
     var uv: vec2<f32> = fragCoord * vec2<f32>(1., aspect);
     var mouse: vec2<f32> = (uniforms.mouse * 2. - uniforms.resolution) / uniforms.resolution * vec2<f32>(1., -aspect);
-    var d: f32 = sdfSquare(uv, mouse, 0.5);
+    var d: f32 = sdfEllipse(uv, mouse, mouse * -1., 1.0);
 
     if (d < 0.) {
         fragColor = vec4<f32>(1., 1., 1., 1.0);

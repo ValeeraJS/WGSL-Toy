@@ -21,7 +21,8 @@ const treeData = [
     children: [
       { title: "1. circle", key: "0-1-0", isLeaf: true },
       { title: "2. square", key: "0-1-1", isLeaf: true },
-      { title: "3. circle moving", key: "0-1-2", isLeaf: true },
+      { title: "3. ellipse", key: "0-1-2", isLeaf: true },
+      { title: "4. polygon", key: "0-1-3", isLeaf: true },
     ],
   },
   {

@@ -172,12 +172,14 @@ function handleEditorBeforeMount(monaco: any) {
             'i32',
             'f32',
             'i32',
-            
+            'bool',
             'texture_2d',
             'Uniforms'
         ],
         funcs: [
             'abs',
+            'atan',
+            'atan2',
             'clamp',
             'ceil',
             'cos',
