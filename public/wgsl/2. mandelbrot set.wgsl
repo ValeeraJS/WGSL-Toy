@@ -25,7 +25,7 @@ fn mandelbrot(p: vec2<f32>) -> vec3<f32> {
 [[stage(fragment)]] fn main() -> void {
 	var aspect: f32 = uniforms.resolution.x / uniforms.resolution.y;
 	var mr: vec2<f32> = uniforms.mouse / uniforms.resolution;
-	mr = (mr - vec2<f32>(0.5, 0.5)) * 2.;
+	mr = (mr - vec2<f32>(0.25, 0.5)) * vec2<f32>(-2.0, 2.0);
     var c: vec3<f32> = mandelbrot((fragCoord + mr) * vec2<f32>(aspect, 1.));
 	fragColor = vec4<f32>(c, 1.);
     return;
