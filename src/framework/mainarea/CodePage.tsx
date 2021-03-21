@@ -8,6 +8,7 @@ import { GeometryNode, Geometry } from "../../engine/geometry.js";
 import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
 import { setMsgOut } from "../ConsoleBar/ConsoleBar";
+import { fpsText } from "../rightside/RightSide";
 
 let f32BufferArray = new Float32Array([0, 0, 0, 0, 0]);
 
@@ -20,6 +21,8 @@ export { f32BufferArray };
 
 let material: Material;
 let mesh: Mesh;
+let lastTime = performance.now();
+let deltaTime = 0;
 
 export async function init(canvas: any) {
     const adapter = await navigator.gpu?.requestAdapter();
@@ -59,8 +62,17 @@ export async function init(canvas: any) {
         f32BufferArray[4] = performance.now() / 1000;
         renderer.render(mesh, f32BufferArray);
         renderer.end();
-        return requestAnimationFrame(frame);
+        deltaTime = performance.now() - lastTime;
+        lastTime = performance.now();
+        fIndex = requestAnimationFrame(frame);
+        return fIndex;
     }
+
+    setInterval(() => {
+        if (fpsText.ref.current) {
+            fpsText.ref.current.innerText = (1000 / deltaTime).toFixed(2) + "fps";
+        }
+    }, 1000)
 
     return frame;
 }
