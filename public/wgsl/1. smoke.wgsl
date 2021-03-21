@@ -9,8 +9,7 @@
 const MAX_ITER: i32 = 20;
 const TAU: f32 = 7.28318530718;
 
-[[stage(fragment)]]
-fn main() -> void {
+[[stage(fragment)]] fn main() -> void {
     var uv: vec2<f32>= (fragCoord + vec2<f32>(1., 1.)) / vec2<f32>(2., 2.);
     var time: f32 = uniforms.time;
     

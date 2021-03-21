@@ -36,7 +36,9 @@ const treeData = [
     title: "Fractal",
     key: "0-3",
     children: [
-      { title: "1. fantasy tunnel", key: "0-3-0", isLeaf: true },
+      { title: "1. julia set", key: "0-3-0", isLeaf: true },
+      { title: "2. mandelbrot set", key: "0-3-1", isLeaf: true },
+      { title: "3. fantasy tunnel", key: "0-3-2", isLeaf: true },
     ],
   }
 ];
