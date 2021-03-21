@@ -13,6 +13,7 @@ const treeData = [
       { title: "1. pure color", key: "0-0-0", isLeaf: true },
       { title: "2. color by uv", key: "0-0-1", isLeaf: true },
       { title: "3. color by mouse", key: "0-0-2", isLeaf: true },
+      { title: "4. chess board", key: "0-0-3", isLeaf: true },
     ],
   },
   {
