@@ -24,12 +24,12 @@ let mesh: Mesh;
 export async function init(canvas: any) {
     const adapter = await navigator.gpu?.requestAdapter();
     if (!adapter) {
-        setMsgOut("Your browser doesn't support WebGPU, please use newest Chrome Canary.");
+        setMsgOut(<div style={{color: 'yellow'}}>Your browser doesn't support WebGPU, please use newest Chrome Canary.</div>);
         return () => {};
     }
     const device = await adapter.requestDevice();
     if (!device) {
-        setMsgOut("Your browser doesn't support WebGPU, please use newest Chrome Canary.");
+        setMsgOut(<div style={{color: 'yellow'}}>Your browser doesn't support WebGPU, please use newest Chrome Canary.</div>);
         return () => {};
     }
     const renderer = new Renderer(device, canvas);
