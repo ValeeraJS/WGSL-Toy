@@ -34,6 +34,7 @@ const { TabPane } = Tabs;
 interface TabTitleProps {
   name: string;
   keyId: string | number;
+  language: ShaderType;
   onDel?: any;
   onSaveCode?: any;
   onCopyPage?: any;
@@ -142,11 +143,19 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
               onChange={this.changeName}
             />
           ) : (
-            <>{name || "Untitled.wgsl"}</>
+            <>{name || "Untitled"}{getShaderSuffix(this.props.language)}</>
           )}
         </span>
       </Dropdown>
     );
+  }
+}
+
+function getShaderSuffix(type: ShaderType) {
+  if (type === ShaderType.WGSL) {
+    return ".wgsl";
+  } else {
+    return ".glsl";
   }
 }
 
@@ -247,7 +256,7 @@ export default class PageTabs extends Component<any, any> {
         const blob = new Blob([pane.code || ''], {
           type: "text/plain",
         });
-        BlobDownloader.download(blob as any, name + ".wgsl");
+        BlobDownloader.download(blob as any, name + getShaderSuffix(pane.language as ShaderType));
       }
     });
   };
@@ -344,6 +353,7 @@ export default class PageTabs extends Component<any, any> {
                       <TabTitle
                         name={pane.title}
                         keyId={pane.key}
+                        language={pane.language as ShaderType}
                         onCloseRight={this.onCloseRight}
                         onCloseOther={this.onCloseOther}
                         onDel={this.remove}

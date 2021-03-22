@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./MenuArea.module.css";
 import { Tree } from "antd";
-import { globalShaderType, setCurrentCode, setCurrentShaderType, setNeedUpdate } from "../../features/editor/shaderSlice";
+import { globalShaderType, setCurrentCode, setCurrentShaderType, setNeedUpdate, ShaderType } from "../../features/editor/shaderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { activeTab, addTab } from "../../features/editor/tabSlice";
 
@@ -48,13 +48,20 @@ const treeData = [
   },
 ];
 
+function getFilePath(name: string, type: ShaderType): string {
+  if (type === ShaderType.WGSL) {
+    return "./wgsl/" + name + ".wgsl";
+  }
+  return name;
+}
+
 function MenuArea() {
   const dispatch = useDispatch();
   const shaderType = useSelector(globalShaderType);
 
   const onSelect = (keys: React.Key[], info: any) => {
     if (info.node.isLeaf) {
-      fetch("./wgsl/" + info.node.title + ".wgsl")
+      fetch(getFilePath(info.node.title, shaderType))
         .then((data) => {
           return data.text();
         })
