@@ -9,15 +9,11 @@ import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
 import { setMsgOut } from "../ConsoleBar/ConsoleBar";
 import { fpsText } from "../rightside/RightSide";
+import glslangModule from '../../engine/glsllang';
 
 let f32BufferArray = new Float32Array([0, 0, 0, 0, 0]);
 
 export { f32BufferArray };
-
-// const options = {
-//     selectOnLineNumbers: true,
-//     automaticLayout: true
-// };
 
 let material: Material;
 let mesh: Mesh;
@@ -88,22 +84,17 @@ fn main() -> void {
 	return;
 }
 `,
-    fragment: `[[block]] struct Uniforms {
-    [[offset(0)]] mouse: vec2<f32>;
-    [[offset(8)]] resolution: vec2<f32>;
-    [[offset(16)]] time: f32;
-};
-[[binding(0), group(0)]] var<uniform> uniforms : Uniforms;  
-[[location(0)]] var<in> fragCoord: vec2<f32>;
-[[location(0)]] var<out> fragColor : vec4<f32>;
+    fragment: `[[location(0)]] var<out> fragColor : vec4<f32>;
 
-
-[[stage(fragment)]]
-fn main() -> void {
-    fragColor = vec4<f32>(uniforms.mouse / uniforms.resolution, 0., 1.0);
+[[stage(fragment)]] fn main() -> void {
+    fragColor = vec4<f32>(0.0, 0.0, 0.0, 1.0);
     return;
-}
+}    
 `
+};
+
+export const glsl45Shaders = {
+    fragment: ``
 };
 
 let fff: any, fIndex: any;
@@ -113,8 +104,8 @@ export function renderCanvasMouseMove(event: any) {
     f32BufferArray[1] = event.offsetY;
 }
 
-export function updateMaterialShader(code: string = '') {
-    material.changeFS(code);
+export function updateMaterialShader(code: string = '', isGlsl = false) {
+    material.changeFS(code, isGlsl);
     mesh.updatePipeline();
     cancelAnimationFrame(fIndex);
     fIndex = fff();
@@ -133,7 +124,7 @@ let hasCanvas = setInterval(() => {
 }, 100);
 
 // 设置语法高亮和代码提示
-function handleEditorBeforeMount(monaco: any) {
+function handleEditorBeforeMountWGSL(monaco: any) {
     monaco.languages.register({ id: 'wgsl' });
 
     // Register a tokens provider for the language
@@ -266,30 +257,36 @@ function handleEditorBeforeMount(monaco: any) {
             var suggestions = [{
                 label: 'ifelse',
                 kind: monaco.languages.CompletionItemKind.Snippet,
-                insertText: [
-                    'if (${1:condition}) {',
-                    '\t$0',
-                    '} else {',
-                    '\t',
-                    '}'
-                ].join('\n'),
+                insertText: `if (\${1:condition}) {
+                    \t$0
+                } else {
+                    \t
+                }`,
                 insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                 documentation: 'If-Else Statement'
+            }, {
+                label: 'location',
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                insertText: `[[location(\${1:0})]]`,
+                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                documentation: 'Location Statement'
             }];
-            return { suggestions: suggestions };
+            return { suggestions };
         }
     });
 }
 
 interface CodePageProps {
     code?: string;
+    language: string;
 }
 
 export default class CodePage extends Component<CodePageProps> {
     isCodePage = true;
 
     state = {
-        code: this.props.code || ''
+        code: this.props.code || '',
+        language: this.props.language || 'wgsl',
     }
 
     updateCode = (code: string = '') => {
@@ -318,7 +315,7 @@ export default class CodePage extends Component<CodePageProps> {
                                 defaultValue={this.state.code}
                                 value={this.state.code}
                                 onChange={this.updateCode}
-                                beforeMount={handleEditorBeforeMount}
+                                beforeMount={handleEditorBeforeMountWGSL}
                             />
                         </div>
                     );

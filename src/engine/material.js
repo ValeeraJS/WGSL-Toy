@@ -9,13 +9,13 @@ function DEBUG(device, source) {
 
     device.popErrorScope().then(err => {
         if (err) {
-            setMsgOut(err.message);
+            /// setMsgOut(err.message);
         } else {
             let time = Date.now() - startTime;
-            setMsgOut(<div>
-                <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
-                <div>Compiled in {time} ms.</div>
-            </div>);
+            // setMsgOut(<div>
+            //     <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
+            //     <div>Compiled in {time} ms.</div>
+            // </div>);
         }
     });
 
@@ -39,10 +39,10 @@ export default class Material {
         };
     }
 
-    changeFS(fs) {
+    changeFS(fs, isGlsl = false) {
         this.fs = fs;
         this.fragmentStage = {
-            module: DEBUG(this.device, fs),
+            module: isGlsl ? DEBUG(this.device, fs) : DEBUG(this.device, fs),
             entryPoint: "main"
         };
         window.stage = this.fragmentStage;

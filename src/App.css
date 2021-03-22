@@ -131,3 +131,7 @@
 .ant-tree-switcher {
   display: none !important;
 }
+
+.ant-tabs-extra-content {
+  display: flex;
+}

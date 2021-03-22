@@ -1,9 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import shaderReducer from '../features/editor/shaderSlice';
+import logReducer from '../features/editor/logSlice';
+import runtimeReducer from '../features/editor/runtimeSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    shader: shaderReducer,
+    logInfo: logReducer,
+    runtime: runtimeReducer,
   },
 });
 
