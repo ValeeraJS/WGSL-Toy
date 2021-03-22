@@ -10,6 +10,7 @@ export enum ShaderType {
 
 interface ShaderState {
 	currentCode: string;
+	needUpdate: boolean;
 	currentShaderType: string;
 	globalShaderType: string;
 	webgpuSupported: boolean;
@@ -22,6 +23,7 @@ let webgl2S = !!document.createElement("canvas").getContext("webgl2");
 let webglS = !!document.createElement("canvas").getContext("webgl");
 
 const initialState: ShaderState = {
+	needUpdate: false,
 	currentCode: "",
 	currentShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
 	globalShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
@@ -34,6 +36,9 @@ export const shaderSlice = createSlice({
 	name: 'shader',
 	initialState,
 	reducers: {
+		setNeedUpdate: (state, action: PayloadAction<boolean>) => {
+			state.needUpdate = action.payload;
+		}, 
 		setCurrentCode: (state, action: PayloadAction<string>) => {
 			state.currentCode = action.payload;
 		},
@@ -46,8 +51,9 @@ export const shaderSlice = createSlice({
 	},
 });
 
-export const { setCurrentCode, setCurrentShaderType, setGlobalShaderType } = shaderSlice.actions;
+export const { setCurrentCode, setCurrentShaderType, setGlobalShaderType, setNeedUpdate } = shaderSlice.actions;
 
+export const codeNeedUpdate = (state: RootState) => state.shader.needUpdate;
 export const currentCode = (state: RootState) => state.shader.currentCode;
 export const currentShaderType = (state: RootState) => state.shader.currentShaderType;
 export const globalShaderType = (state: RootState) => state.shader.globalShaderType;

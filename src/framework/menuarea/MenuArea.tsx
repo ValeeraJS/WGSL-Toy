@@ -43,7 +43,7 @@ const treeData = [
       { title: "2. mandelbrot set", key: "0-3-1", isLeaf: true },
       { title: "3. fantasy tunnel", key: "0-3-2", isLeaf: true },
     ],
-  }
+  },
 ];
 
 const onSelect = (keys: React.Key[], info: any) => {
@@ -58,6 +58,9 @@ const onSelect = (keys: React.Key[], info: any) => {
           info.node.title + ".wgsl",
           str
         );
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }
 };

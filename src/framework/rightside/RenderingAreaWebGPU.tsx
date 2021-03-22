@@ -1,7 +1,7 @@
 import React from "react";
 import { IRenderingAreaProps } from "./IRenderingArea";
 import { useSelector } from "react-redux";
-import { currentShaderType, ShaderType } from "../../features/editor/shaderSlice";
+import { currentCode, currentShaderType, ShaderType } from "../../features/editor/shaderSlice";
 
 import F32Buffer from "../../engine/buffer.js";
 import Renderer from "../../engine/renderer";
@@ -14,6 +14,11 @@ import glslangModule from '../../engine/glsllang';
 
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
+    const codes = useSelector(currentCode);
+    console.log(props, '000', codes)
+    if (codes && (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45)) {
+        updateMaterialShader(codes, shaderType === ShaderType.ES45);
+    }
     return <canvas id={props.id} width={props.width} height={props.height} style={{
         display: (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45) ? 'auto' : 'none',
     }}></canvas>;

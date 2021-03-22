@@ -7,7 +7,27 @@ import styles from "./Tabs.module.css";
 import BlobDownloader from "@valeera/blobdownloader";
 import Dropzone from "react-dropzone";
 import ShaderTypeSelect from "./ShaderTypeSelect";
-import { updateMaterialShader, wgslShaders } from "../rightside/RenderingAreaWebGPU";
+import {
+  updateMaterialShader,
+  wgslShaders,
+} from "../rightside/RenderingAreaWebGPU";
+import { connect } from "react-redux";
+import { RootState } from "../../app/store";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import {
+  setCurrentCode,
+  setCurrentShaderType,
+  setNeedUpdate,
+  ShaderType,
+} from "../../features/editor/shaderSlice";
+import {
+  activeTab,
+  addTab,
+  editTab,
+  removeTab,
+  setTabs,
+  TabDescripter,
+} from "../../features/editor/tabSlice";
 
 const { TabPane } = Tabs;
 
@@ -130,16 +150,41 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
   }
 }
 
-export default class PageTabs extends Component {
+@(connect(
+  (state: RootState) => {
+    return {
+      tabs: state.tabs,
+      shader: state.shader,
+    };
+  },
+  (dispatch) => {
+    return bindActionCreators(
+      {
+        setNeedUpdate,
+        setCurrentCode,
+        setCurrentShaderType,
+        addTab,
+        activeTab,
+        removeTab,
+        editTab,
+        setTabs
+      },
+      dispatch
+    );
+  }
+) as any)
+export default class PageTabs extends Component<any, any> {
   newTabIndex = 0;
 
   onChange = (activeKey: string) => {
-    this.setState({ activeKey });
-    this.state.panes.forEach((pane: any, i: number) => {
+    let {panes} = this.props.tabs;
+    panes.forEach((pane: any, i: number) => {
       if (pane.key === activeKey && pane.ref?.current?.isCodePage) {
-        updateMaterialShader(pane.ref.current.state.code, pane.ref.current.state.language);
+        this.props.setCurrentCode(pane.ref.current.state.code);
+        this.props.setCurrentShaderType(pane.ref.current.state.language);
       }
     });
+    this.props.activeTab(activeKey);
   };
 
   onEdit = (targetKey: any, action: React.ReactText) => {
@@ -156,37 +201,27 @@ export default class PageTabs extends Component {
     fragColor = vec4<f32>(0.0, 0.0, 0.0, 1.0);
     return;
 }
-`
+`,
+    language: ShaderType = this.props.shader.globalShaderType
   ) => {
-    const { panes } = this.state;
     const activeKey = key + `${Date.now()}`;
-    const newPanes = [...panes];
-    const tmpRef = React.createRef() as any;
-    newPanes.push({
-      title: (
-        <TabTitle
-          name={tabName}
-          keyId={activeKey}
-          onCloseRight={this.onCloseRight}
-          onCloseOther={this.onCloseOther}
-          onDel={this.remove}
-          onSaveCode={this.onSaveCode}
-          onCopyPage={this.onCopyPage}
-        />
-      ),
-      content: <CodePage language="wgsl" ref={tmpRef} code={code} />,
+    const destripter: TabDescripter = {
+      title: tabName,
+      content: "CodePage",
+      language: language,
+      code: code,
+      isCodePage: true,
       key: activeKey,
-      ref: tmpRef,
-    });
-    updateMaterialShader(code);
-    this.setState({
-      panes: newPanes,
-      activeKey,
-    });
+    };
+
+    this.props.addTab(destripter);
+    this.props.activeTab(activeKey);
+    this.props.setCurrentCode(code);
+    this.props.setCurrentShaderType(language);
   };
 
   remove = (targetKey: string) => {
-    const { panes, activeKey } = this.state;
+    let {activeKey, panes} = this.props.tabs;
     let newActiveKey = activeKey;
     let lastIndex: number = -1;
     panes.forEach((pane: any, i: number) => {
@@ -202,16 +237,14 @@ export default class PageTabs extends Component {
         newActiveKey = newPanes[0].key;
       }
     }
-    this.setState({
-      panes: newPanes,
-      activeKey: newActiveKey,
-    });
+    this.props.removeTab(targetKey);
+    this.props.activeTab(newActiveKey);
   };
 
   onSaveCode = (targetKey: string, name: string = "Untitled") => {
-    this.state.panes.forEach((pane: any) => {
-      if (pane.key === targetKey && pane.ref?.current) {
-        const blob = new Blob([pane.ref.current.state.code], {
+    this.props.tabs.panes.forEach((pane: TabDescripter) => {
+      if (pane.key === targetKey) {
+        const blob = new Blob([pane.code || ''], {
           type: "text/plain",
         });
         BlobDownloader.download(blob as any, name + ".wgsl");
@@ -220,29 +253,27 @@ export default class PageTabs extends Component {
   };
 
   onCopyPage = (targetKey: string, name: string = "Untitled") => {
-    this.state.panes.forEach((pane: any) => {
-      if (pane.key === targetKey && pane.ref?.current) {
-        this.add("copy", name + " Copy", pane.ref.current.state.code);
+    this.props.tabs.panes.forEach((pane: TabDescripter) => {
+      if (pane.key === targetKey) {
+        this.add("copy", name + " Copy", pane.code, pane.language);
       }
     });
   };
 
   onCloseOther = (targetKey: string) => {
     let arr: any[] = [];
-    this.state.panes.forEach((pane: any, i: number) => {
+    this.props.tabs.panes.forEach((pane: any) => {
       if (pane.key === targetKey) {
         arr.push(pane);
       }
     });
-    this.setState({
-      panes: arr,
-    });
+    this.props.setTabs(arr);
   };
 
   onCloseRight = (targetKey: string) => {
     let isFind = false;
     let arr: any[] = [];
-    this.state.panes.forEach((pane: any, i: number) => {
+    this.props.tabs.panes.forEach((pane: any) => {
       if (!isFind) {
         arr.push(pane);
       }
@@ -250,45 +281,24 @@ export default class PageTabs extends Component {
         isFind = true;
       }
     });
-    this.setState({
-      panes: arr,
-    });
+    this.props.setTabs(arr);
   };
 
   tmpRef = React.createRef() as any;
 
-  state = {
-    activeKey: "1",
-    panes: [
-      {
-        title: (
-          <TabTitle
-            name="Hello World.wgsl"
-            keyId="1"
-            onCloseRight={this.onCloseRight}
-            onCloseOther={this.onCloseOther}
-            onDel={this.remove}
-            onSaveCode={this.onSaveCode}
-            onCopyPage={this.onCopyPage}
-          />
-        ),
-        content: <CodePage language="wgsl" ref={this.tmpRef} code={wgslShaders.fragment} />,
-        ref: this.tmpRef,
-        key: "1",
-      },
-    ],
-  };
-
   runCode = () => {
-    this.state.panes.forEach((pane: any, i: number) => {
-      if (pane.key === this.state.activeKey && pane.ref?.current) {
-        updateMaterialShader(pane.ref.current.state.code);
+    let {activeKey, panes} = this.props.tabs;
+    panes.forEach((pane: TabDescripter) => {
+      if (pane.key === activeKey) {
+        this.props.setNeedUpdate(true);
+        this.props.setCurrentShaderType(pane.language);
+        this.props.setCurrentCode(pane.code);
       }
     });
   };
 
   render() {
-    const { panes, activeKey } = this.state;
+    const { panes, activeKey } = this.props.tabs;
     return (
       <Dropzone
         noClick
@@ -320,7 +330,7 @@ export default class PageTabs extends Component {
                 onEdit={this.onEdit}
                 tabBarExtraContent={
                   <>
-                    <ShaderTypeSelect/>
+                    <ShaderTypeSelect />
                     <IconButton
                       onClick={this.runCode}
                       icon={<CaretRightOutlined style={{ fontSize: "24px" }} />}
@@ -328,11 +338,29 @@ export default class PageTabs extends Component {
                   </>
                 }
               >
-                {panes.map((pane: any) => (
-                  <TabPane tab={pane.title} key={pane.key} closable>
-                    {pane.content}
-                  </TabPane>
-                ))}
+                {panes.map((pane: TabDescripter) => {
+                  if (pane.isCodePage) {
+                    let title = (
+                      <TabTitle
+                        name={pane.title}
+                        keyId={pane.key}
+                        onCloseRight={this.onCloseRight}
+                        onCloseOther={this.onCloseOther}
+                        onDel={this.remove}
+                        onSaveCode={this.onSaveCode}
+                        onCopyPage={this.onCopyPage}
+                      />
+                    );
+                    let codePage = <CodePage language={pane.language as string} code={pane.code} keyName={pane.key}/>
+                    return (
+                      <TabPane tab={title} key={pane.key} closable>
+                        {codePage}
+                      </TabPane>
+                    );
+                  } else {
+                    return "Unknown Page";
+                  }
+                })}
               </Tabs>
             </div>
           );
