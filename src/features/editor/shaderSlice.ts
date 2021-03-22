@@ -11,8 +11,8 @@ export enum ShaderType {
 interface ShaderState {
 	currentCode: string;
 	needUpdate: boolean;
-	currentShaderType: string;
-	globalShaderType: string;
+	currentShaderType: ShaderType;
+	globalShaderType: ShaderType;
 	webgpuSupported: boolean;
 	webgl2Supported: boolean;
 	webglSupported: boolean;

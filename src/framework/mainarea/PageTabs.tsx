@@ -290,9 +290,9 @@ export default class PageTabs extends Component<any, any> {
     let {activeKey, panes} = this.props.tabs;
     panes.forEach((pane: TabDescripter) => {
       if (pane.key === activeKey) {
-        this.props.setNeedUpdate(true);
         this.props.setCurrentShaderType(pane.language);
         this.props.setCurrentCode(pane.code);
+        this.props.setNeedUpdate(true);
       }
     });
   };

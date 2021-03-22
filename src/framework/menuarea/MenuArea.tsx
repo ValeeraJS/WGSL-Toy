@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "./MenuArea.module.css";
 import { Tree } from "antd";
-import { CodePageRef } from "../mainarea/MainArea";
+import { globalShaderType, setCurrentCode, setCurrentShaderType, setNeedUpdate } from "../../features/editor/shaderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { activeTab, addTab } from "../../features/editor/tabSlice";
 
 const { DirectoryTree } = Tree;
 
@@ -46,26 +48,36 @@ const treeData = [
   },
 ];
 
-const onSelect = (keys: React.Key[], info: any) => {
-  if (info.node.isLeaf) {
-    fetch("./wgsl/" + info.node.title + ".wgsl")
-      .then((data) => {
-        return data.text();
-      })
-      .then((str) => {
-        CodePageRef.page.current?.add(
-          info.node.title + Date.now(),
-          info.node.title + ".wgsl",
-          str
-        );
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-};
-
 function MenuArea() {
+  const dispatch = useDispatch();
+  const shaderType = useSelector(globalShaderType);
+
+  const onSelect = (keys: React.Key[], info: any) => {
+    if (info.node.isLeaf) {
+      fetch("./wgsl/" + info.node.title + ".wgsl")
+        .then((data) => {
+          return data.text();
+        })
+        .then((str) => {
+          let key = info.node.title + Date.now();
+          dispatch(addTab({
+            title: info.node.title,
+            content: "CodePage",
+            key,
+            code: str,
+            isCodePage: true,
+            language: shaderType
+          }));
+          dispatch(activeTab(key));
+          dispatch(setCurrentShaderType(shaderType));
+          dispatch(setCurrentCode(str));
+          dispatch(setNeedUpdate(true));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
   return (
     <div className={styles.menuarea}>
       <div
