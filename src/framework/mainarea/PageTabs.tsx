@@ -7,10 +7,6 @@ import styles from "./Tabs.module.css";
 import BlobDownloader from "@valeera/blobdownloader";
 import Dropzone from "react-dropzone";
 import ShaderTypeSelect from "./ShaderTypeSelect";
-import {
-  updateMaterialShader,
-  wgslShaders,
-} from "../rightside/RenderingAreaWebGPU";
 import { connect } from "react-redux";
 import { RootState } from "../../app/store";
 import { bindActionCreators } from "@reduxjs/toolkit";
