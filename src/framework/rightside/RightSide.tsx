@@ -41,7 +41,7 @@ function RightSide(props: IRightProps) {
             document.exitFullscreen();
             dispatch(setFullscreen(false));
           } else {
-            ref.current?.requestFullscreen();
+            (ref.current as any)?.requestFullscreen();
             dispatch(setFullscreen(true));
           }
         }}></IconButton>
