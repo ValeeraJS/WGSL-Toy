@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from './ConsoleBar.module.css';
 import { StopOutlined } from '@ant-design/icons';
 import IconButton from "../mainarea/IconButton";

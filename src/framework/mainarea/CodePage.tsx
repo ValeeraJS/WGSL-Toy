@@ -112,7 +112,7 @@ export function updateMaterialShader(code: string = '', isGlsl = false) {
 }
 
 let hasCanvas = setInterval(() => {
-    let canvas = document.getElementById("renderTarget");
+    let canvas = document.getElementById("webgpuTarget");
     if (canvas) {
         canvas.addEventListener('mousemove', renderCanvasMouseMove);
         clearInterval(hasCanvas);

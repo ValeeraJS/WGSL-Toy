@@ -5,21 +5,13 @@ import {f32BufferArray} from '../mainarea/CodePage';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import IconButton from '../mainarea/IconButton';
 import { useSelector, useDispatch } from "react-redux";
-import { fullscreen, message, setFullscreen, setMessage } from '../../features/editor/runtimeSlice';
+import { fullscreen, setFullscreen } from '../../features/editor/runtimeSlice';
+import { currentShaderType, ShaderType } from '../../features/editor/shaderSlice';
 
 
 interface IRightProps {
   width?: number;
 }
-
-// function setFullScreen(dom?: HTMLElement | null) {
-//   if (!dom) {
-//     return;
-//   }
-//   dom.requestFullscreen({ navigationUI: "show" }).catch(err => {
-//     alert(`An error occurred while trying to switch into full-screen mode: ${err.message} (${err.name})`);
-//   });
-// }
 
 export const fpsText = {
   ref: createRef() as any
@@ -27,13 +19,22 @@ export const fpsText = {
 
 function RightSide(props: IRightProps) {
   const dispatch = useDispatch();
+  const shaderType = useSelector(currentShaderType);
   const isFullscreen = useSelector(fullscreen);
   const { width, height, ref } = useResizeDetector();
   f32BufferArray[2] = width || 0;
   f32BufferArray[3] = height || 0;
   return (
     <div className={styles.rightside} ref={ref as any}>
-      <canvas id="renderTarget" width={width} height={height}></canvas>
+      <canvas id="webgpuTarget" width={width} height={height} style={{
+        display: shaderType === (ShaderType.WGSL || shaderType === ShaderType.ES45) ? 'auto' : 'none',
+      }}></canvas>
+      <canvas id="webgl2Target" width={width} height={height} style={{
+        display: shaderType === ShaderType.ES30 ? 'auto' : 'none',
+      }}></canvas>
+      <canvas id="webglTarget" width={width} height={height} style={{
+        display: shaderType === ShaderType.ES20 ? 'auto' : 'none',
+      }}></canvas>
       <div className={styles.toolbar}>
         <span className={styles.sizetext}>{width}×{height}</span>
         <span className={styles.sizetext} ref={fpsText.ref}></span>
