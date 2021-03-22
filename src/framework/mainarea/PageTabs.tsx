@@ -1,12 +1,13 @@
 import { Tabs, Menu, Dropdown } from "antd";
 import React, { Component } from "react";
-import CodePage, { updateMaterialShader, wgslShaders } from "./CodePage";
+import CodePage from "./CodePage";
 import { CaretRightOutlined } from "@ant-design/icons";
 import IconButton from "./IconButton";
 import styles from "./Tabs.module.css";
 import BlobDownloader from "@valeera/blobdownloader";
 import Dropzone from "react-dropzone";
 import ShaderTypeSelect from "./ShaderTypeSelect";
+import { updateMaterialShader, wgslShaders } from "../rightside/RenderingAreaWebGPU";
 
 const { TabPane } = Tabs;
 

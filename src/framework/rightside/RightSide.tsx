@@ -1,12 +1,12 @@
 import React, { createRef } from 'react';
 import styles from './RightSide.module.css';
 import { useResizeDetector } from 'react-resize-detector';
-import {f32BufferArray} from '../mainarea/CodePage';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import IconButton from '../mainarea/IconButton';
 import { useSelector, useDispatch } from "react-redux";
 import { fullscreen, setFullscreen } from '../../features/editor/runtimeSlice';
 import { currentShaderType, ShaderType } from '../../features/editor/shaderSlice';
+import RenderingAreaWebGPU, { f32BufferArray } from './RenderingAreaWebGPU';
 
 
 interface IRightProps {
@@ -26,9 +26,7 @@ function RightSide(props: IRightProps) {
   f32BufferArray[3] = height || 0;
   return (
     <div className={styles.rightside} ref={ref as any}>
-      <canvas id="webgpuTarget" width={width} height={height} style={{
-        display: shaderType === (ShaderType.WGSL || shaderType === ShaderType.ES45) ? 'auto' : 'none',
-      }}></canvas>
+      <RenderingAreaWebGPU id="webgpuTarget" width={width} height={height}/>
       <canvas id="webgl2Target" width={width} height={height} style={{
         display: shaderType === ShaderType.ES30 ? 'auto' : 'none',
       }}></canvas>
