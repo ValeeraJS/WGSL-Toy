@@ -8,6 +8,8 @@ import { fps, fullscreen, setFullscreen } from '../../features/editor/runtimeSli
 import { currentShaderType, ShaderType } from '../../features/editor/shaderSlice';
 import RenderingAreaWebGPU from './RenderingAreaWebGPU';
 import { uniformBufferArray } from './common3dDatas';
+import RenderingAreaWebGL from './RenderingAreaWebGL';
+import RenderingAreaWebGL2 from './RenderingAreaWebGL2';
 
 
 interface IRightProps {
@@ -17,7 +19,6 @@ interface IRightProps {
 function RightSide(props: IRightProps) {
   const dispatch = useDispatch();
   const fpsInfo = useSelector(fps);
-  const shaderType = useSelector(currentShaderType);
   const isFullscreen = useSelector(fullscreen);
   const { width, height, ref } = useResizeDetector();
   uniformBufferArray[2] = width || 0;
@@ -25,12 +26,9 @@ function RightSide(props: IRightProps) {
   return (
     <div className={styles.rightside} ref={ref as any}>
       <RenderingAreaWebGPU id="webgpuTarget" width={width} height={height}/>
-      <canvas id="webgl2Target" width={width} height={height} style={{
-        display: shaderType === ShaderType.ES30 ? 'auto' : 'none',
-      }}></canvas>
-      <canvas id="webglTarget" width={width} height={height} style={{
-        display: shaderType === ShaderType.ES20 ? 'auto' : 'none',
-      }}></canvas>
+      <RenderingAreaWebGL2  id="webgl2Target" width={width} height={height}/>
+      <RenderingAreaWebGL  id="webglTarget" width={width} height={height}/>
+      
       <div className={styles.toolbar}>
         <span className={styles.sizetext}>{width}×{height}</span>
         <span className={styles.sizetext}>{fpsInfo.toFixed(2)}fps</span>

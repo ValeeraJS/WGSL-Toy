@@ -11,10 +11,17 @@ export default function getDefaultCode(shaderType: ShaderType): string {
 `;
     } else if (shaderType === ShaderType.ES45) {
         return `#version 450
-layout(location = 0) out vec4 outColor;
+layout(location = 0) out vec4 fragColor;
         
 void main() {
-    outColor = vec4(1.0, 0.0, 0.0, 1.0);
+    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+}
+`;
+    } else if (shaderType === ShaderType.ES20) {
+        return `#version 200
+
+void main() {
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
 `;
     }
