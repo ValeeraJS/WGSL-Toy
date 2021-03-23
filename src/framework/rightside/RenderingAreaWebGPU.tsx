@@ -34,6 +34,7 @@ let lastTime = performance.now();
 let deltaTime = 0;
 
 export async function init(canvas: any) {
+    const glslang = await glslangModule();
     const adapter = await navigator.gpu?.requestAdapter();
     if (!adapter) {
         setMsgOut(<div style={{color: 'yellow'}}>Your browser doesn't support WebGPU, please use newest Chrome Canary.</div>);
@@ -62,7 +63,7 @@ export async function init(canvas: any) {
         format: 'float32x2'
     })
 
-    material = new Material(device, wgslShaders.vertex, wgslShaders.fragment);
+    material = new Material(device, wgslShaders.vertex, wgslShaders.fragment, glslang);
     const geo = new Geometry("triangle-list", 6, [vnode]);
     mesh = new Mesh(device, geo, material);
 

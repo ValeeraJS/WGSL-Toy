@@ -1,6 +1,6 @@
 import {setMsgOut} from '../framework/ConsoleBar/ConsoleBar';
 
-function DEBUG(device, source) {
+function getWgslModule(device, source) {
     let startTime = Date.now();
     device.pushErrorScope('validation');
     const shaderModule = device.createShaderModule({
@@ -22,8 +22,32 @@ function DEBUG(device, source) {
     return shaderModule;
 }
 
+function getGlslModule(device, source, glslang) {
+    console.log(source, glslang)
+    let startTime = Date.now();
+    device.pushErrorScope('validation');
+    const shaderModule = device.createShaderModule({
+        code: glslang.compileGLSL(source, 'fragment'),
+    });
+
+    device.popErrorScope().then(err => {
+        if (err) {
+            /// setMsgOut(err.message);
+        } else {
+            let time = Date.now() - startTime;
+            // setMsgOut(<div>
+            //     <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
+            //     <div>Compiled in {time} ms.</div>
+            // </div>);
+        }
+    });
+
+    return shaderModule;
+}
+
 export default class Material {
-    constructor(device, vs, fs) {
+    constructor(device, vs, fs, glslang) {
+        this.glslang = glslang;
         this.vs = vs;
         this.fs = fs;
         this.device = device;
@@ -34,7 +58,7 @@ export default class Material {
             entryPoint: "main",
         };
         this.fragmentStage = {
-            module: DEBUG(device, fs),
+            module: getWgslModule(device, fs),
             entryPoint: "main"
         };
     }
@@ -42,7 +66,7 @@ export default class Material {
     changeFS(fs, isGlsl = false) {
         this.fs = fs;
         this.fragmentStage = {
-            module: isGlsl ? DEBUG(this.device, fs) : DEBUG(this.device, fs),
+            module: isGlsl ? getGlslModule(this.device, fs, this.glslang) : getWgslModule(this.device, fs),
             entryPoint: "main"
         };
     }
