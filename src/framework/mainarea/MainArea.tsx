@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import styles from './MainArea.module.css';
 import PageTabs from './PageTabs';
 

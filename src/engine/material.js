@@ -2,6 +2,7 @@ import {setMessage, MSG_TYPE} from '../features/editor/logSlice';
 import {store} from './../app/store';
 
 function getWgslModule(device, source) {
+    // store.dispatch(setNeedUpdate(false));
     let startTime = Date.now();
     device.pushErrorScope('validation');
     const shaderModule = device.createShaderModule({
@@ -35,6 +36,7 @@ function getWgslModule(device, source) {
 function getGlslModule(device, source, glslang) {
     let startTime = Date.now();
     device.pushErrorScope('validation');
+    console.log(source)
     const shaderModule = device.createShaderModule({
         code: glslang.compileGLSL(source, 'fragment'),
     });

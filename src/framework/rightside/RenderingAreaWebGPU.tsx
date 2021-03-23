@@ -1,7 +1,7 @@
 import React from "react";
 import { IRenderingAreaProps } from "./IRenderingArea";
-import { useSelector } from "react-redux";
-import { currentCode, currentShaderType, ShaderType } from "../../features/editor/shaderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { codeNeedUpdate, currentCode, currentShaderType, setNeedUpdate, ShaderType } from "../../features/editor/shaderSlice";
 
 import F32Buffer from "../../engine/buffer.js";
 import Renderer from "../../engine/renderer";
@@ -16,8 +16,11 @@ import { setFPS } from "../../features/editor/runtimeSlice";
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
     const codes = useSelector(currentCode);
-    if (codes && (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45)) {
+    const needUpdate = useSelector(codeNeedUpdate);
+    const dispatch = useDispatch();
+    if (codes && (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45) && needUpdate) {
         updateMaterialShader(codes, shaderType === ShaderType.ES45);
+        dispatch(setNeedUpdate(false));
     }
     return <canvas id={props.id} width={props.width} height={props.height} style={{
         display: (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45) ? 'auto' : 'none',
