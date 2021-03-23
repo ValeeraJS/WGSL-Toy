@@ -262,7 +262,7 @@ export default class PageTabs extends Component<any, any> {
         const blob = new Blob([pane.code || ''], {
           type: "text/plain",
         });
-        BlobDownloader.download(blob as any, name + getShaderSuffix(pane.language as ShaderType));
+        BlobDownloader.download(blob as any, (name || 'Untitled') + getShaderSuffix(pane.language as ShaderType));
       }
     });
   };
