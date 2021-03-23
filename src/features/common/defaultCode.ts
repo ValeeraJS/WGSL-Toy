@@ -18,9 +18,7 @@ void main() {
 }
 `;
     } else if (shaderType === ShaderType.ES20) {
-        return `#version 200
-
-void main() {
+        return `void main() {
     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
 `;
