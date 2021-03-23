@@ -6,7 +6,8 @@ import IconButton from '../mainarea/IconButton';
 import { useSelector, useDispatch } from "react-redux";
 import { fps, fullscreen, setFullscreen } from '../../features/editor/runtimeSlice';
 import { currentShaderType, ShaderType } from '../../features/editor/shaderSlice';
-import RenderingAreaWebGPU, { f32BufferArray } from './RenderingAreaWebGPU';
+import RenderingAreaWebGPU from './RenderingAreaWebGPU';
+import { uniformBufferArray } from './common3dDatas';
 
 
 interface IRightProps {
@@ -19,8 +20,8 @@ function RightSide(props: IRightProps) {
   const shaderType = useSelector(currentShaderType);
   const isFullscreen = useSelector(fullscreen);
   const { width, height, ref } = useResizeDetector();
-  f32BufferArray[2] = width || 0;
-  f32BufferArray[3] = height || 0;
+  uniformBufferArray[2] = width || 0;
+  uniformBufferArray[3] = height || 0;
   return (
     <div className={styles.rightside} ref={ref as any}>
       <RenderingAreaWebGPU id="webgpuTarget" width={width} height={height}/>

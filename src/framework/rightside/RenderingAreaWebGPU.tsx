@@ -12,6 +12,7 @@ import glslangModule from '../../engine/glsllang';
 import getDefaultCode from "../../features/common/defaultCode";
 import { store } from "../../app/store";
 import { setFPS } from "../../features/editor/runtimeSlice";
+import { uniformBufferArray, verticesData } from "./common3dDatas";
 
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
@@ -26,11 +27,6 @@ export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
         display: (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45) ? 'auto' : 'none',
     }}></canvas>;
 }
-
-
-let f32BufferArray = new Float32Array([0, 0, 0, 0, 0]);
-
-export { f32BufferArray };
 
 let material: Material;
 let mesh: Mesh;
@@ -48,16 +44,6 @@ export async function init(canvas: any) {
         return () => {};
     }
     const renderer = new Renderer(device, canvas);
-
-    // 顶点位置数据
-    const verticesData = new Float32Array([
-        -1, 1,
-        -1, -1,
-        1, -1,
-        -1, 1,
-        1, -1,
-        1, 1,
-    ]);
     const verticesBuffer = new F32Buffer(device, verticesData, GPUBufferUsage.VERTEX);
     const vnode = new GeometryNode(verticesBuffer, 'vertices', {
         stride: 2,
@@ -71,8 +57,8 @@ export async function init(canvas: any) {
 
     function frame() {
         renderer.clear();
-        f32BufferArray[4] = performance.now() / 1000;
-        renderer.render(mesh, f32BufferArray);
+        uniformBufferArray[4] = performance.now() / 1000;
+        renderer.render(mesh, uniformBufferArray);
         renderer.end();
         deltaTime = performance.now() - lastTime;
         lastTime = performance.now();
@@ -105,12 +91,12 @@ export const glsl45Shaders = {
 
 let fff: any, fIndex: any;
 
-export function renderCanvasMouseMove(event: any) {
-    f32BufferArray[0] = event.offsetX;
-    f32BufferArray[1] = event.offsetY;
+function renderCanvasMouseMove(event: any) {
+    uniformBufferArray[0] = event.offsetX;
+    uniformBufferArray[1] = event.offsetY;
 }
 
-export function updateMaterialShader(code: string = '', isGlsl = false) {
+function updateMaterialShader(code: string = '', isGlsl = false) {
     if (material) {
         material.changeFS(code, isGlsl);
         mesh.updatePipeline();
