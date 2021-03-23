@@ -13,8 +13,7 @@ fn getR(p: vec3<f32>, a: vec3<f32>, r: vec3<f32>) -> vec3<f32> {
 
 const one: vec3<f32> = vec3<f32>(1.0, 1.0, 1.0);
 
-[[stage(fragment)]]
-fn main() -> void {
+[[stage(fragment)]] fn main() -> void {
     fragColor = vec4<f32>(0., 0., 0., 0.);
     var p: vec3<f32>;
     var r: vec2<f32> = uniforms.resolution;
