@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import getDefaultCode from '../coomon/defaultCode';
 
 export enum ShaderType {
 	WGSL = "WGSL",
@@ -30,7 +31,7 @@ export const SUPPORT_STATE = {
 
 const initialState: ShaderState = {
 	needUpdate: false,
-	currentCode: "",
+	currentCode: getDefaultCode(webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20),
 	currentShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
 	globalShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
 	webgpuSupported: webgpuS,

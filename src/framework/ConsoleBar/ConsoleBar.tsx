@@ -8,7 +8,6 @@ import { messages, MSG_TYPE, setMessage } from '../../features/editor/logSlice';
 export default function ConsoleBar() {
     const dispatch = useDispatch();
     const msgs = useSelector(messages);
-    console.log(msgs);
     return (<div className={styles.consolebar}>
         <div className={styles.titleline}>
             Log

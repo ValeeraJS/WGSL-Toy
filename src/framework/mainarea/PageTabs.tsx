@@ -24,6 +24,7 @@ import {
   setTabs,
   TabDescripter,
 } from "../../features/editor/tabSlice";
+import getDefaultCode from "../../features/coomon/defaultCode";
 
 const { TabPane } = Tabs;
 
@@ -201,13 +202,7 @@ export default class PageTabs extends Component<any, any> {
   add = (
     key: string = "",
     tabName: string = "",
-    code: string = `[[location(0)]] var<out> fragColor : vec4<f32>;
-
-[[stage(fragment)]] fn main() -> void {
-    fragColor = vec4<f32>(0.0, 0.0, 0.0, 1.0);
-    return;
-}
-`,
+    code: string | null | undefined,
     language: ShaderType = this.props.shader.globalShaderType
   ) => {
     const activeKey = key + `${Date.now()}`;
@@ -215,7 +210,7 @@ export default class PageTabs extends Component<any, any> {
       title: tabName,
       content: "CodePage",
       language: language,
-      code: code,
+      code: code || getDefaultCode(language),
       isCodePage: true,
       key: activeKey,
     };
@@ -317,7 +312,7 @@ export default class PageTabs extends Component<any, any> {
                 this.add(
                   files[i].name,
                   files[i].name,
-                  (reader.result as string) || ""
+                  reader.result as string
                 );
               };
             }

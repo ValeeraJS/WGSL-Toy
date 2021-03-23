@@ -10,6 +10,7 @@ import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
 import { fpsText } from "../rightside/RightSide";
 import glslangModule from '../../engine/glsllang';
+import getDefaultCode from "../../features/coomon/defaultCode";
 
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
@@ -60,7 +61,7 @@ export async function init(canvas: any) {
         format: 'float32x2'
     })
 
-    material = new Material(device, wgslShaders.vertex, wgslShaders.fragment, glslang);
+    material = new Material(device, wgslShaders.vertex, getDefaultCode(ShaderType.WGSL), glslang);
     const geo = new Geometry("triangle-list", 6, [vnode]);
     mesh = new Mesh(device, geo, material);
 
@@ -94,15 +95,7 @@ fn main() -> void {
     fragCoord = a_position;
 	return;
 }
-`,
-    fragment: `[[location(0)]] var<out> fragColor : vec4<f32>;
-
-[[stage(fragment)]] fn main() -> void {
-    fragColor = vec4<f32>(0.0, 0.0, 0.0, 1.0);
-    return;
-}    
-`
-};
+`};
 
 export const glsl45Shaders = {
     fragment: ``
@@ -116,10 +109,12 @@ export function renderCanvasMouseMove(event: any) {
 }
 
 export function updateMaterialShader(code: string = '', isGlsl = false) {
-    material.changeFS(code, isGlsl);
-    mesh.updatePipeline();
-    cancelAnimationFrame(fIndex);
-    fIndex = fff();
+    if (material) {
+        material.changeFS(code, isGlsl);
+        mesh.updatePipeline();
+        cancelAnimationFrame(fIndex);
+        fIndex = fff();
+    }
 }
 
 let hasCanvas = setInterval(() => {

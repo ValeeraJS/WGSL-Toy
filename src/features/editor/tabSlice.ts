@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import getDefaultCode from '../coomon/defaultCode';
 import { ShaderType } from './shaderSlice';
 
 interface TabState {
@@ -17,8 +18,15 @@ export interface TabDescripter {
 }
 
 const initialState: TabState = {
-    activeKey: '0',
-	panes: []
+    activeKey: 'hello world',
+	panes: [{
+        title: 'HelloWorld',
+        language: ShaderType.WGSL,
+        code: getDefaultCode(ShaderType.WGSL),
+        isCodePage: true,
+        key: 'hello world',
+        content: ''
+    }]
 };
 
 export const tabSlice = createSlice({
