@@ -208,7 +208,6 @@ export default class CodePage extends Component<any> {
   };
 
   render() {
-    console.log(this.props.code)
     return (
       <Dropzone
         noClick

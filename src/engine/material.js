@@ -45,7 +45,5 @@ export default class Material {
             module: isGlsl ? DEBUG(this.device, fs) : DEBUG(this.device, fs),
             entryPoint: "main"
         };
-        window.stage = this.fragmentStage;
-        console.log(this.fragmentStage)
     }
 } 

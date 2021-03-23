@@ -15,7 +15,6 @@ import glslangModule from '../../engine/glsllang';
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
     const codes = useSelector(currentCode);
-    console.log(props, '000', codes)
     if (codes && (shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45)) {
         updateMaterialShader(codes, shaderType === ShaderType.ES45);
     }

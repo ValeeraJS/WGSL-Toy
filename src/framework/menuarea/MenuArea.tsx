@@ -51,7 +51,9 @@ const treeData = [
 function getFilePath(name: string, type: ShaderType): string {
   if (type === ShaderType.WGSL) {
     return "./wgsl/" + name + ".wgsl";
-  }
+  } else if (type === ShaderType.ES45) {
+    return "./es4.5/" + name + ".glsl";
+  } 
   return name;
 }
 

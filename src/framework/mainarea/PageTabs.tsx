@@ -184,9 +184,10 @@ export default class PageTabs extends Component<any, any> {
   onChange = (activeKey: string) => {
     let {panes} = this.props.tabs;
     panes.forEach((pane: any, i: number) => {
-      if (pane.key === activeKey && pane.ref?.current?.isCodePage) {
-        this.props.setCurrentCode(pane.ref.current.state.code);
-        this.props.setCurrentShaderType(pane.ref.current.state.language);
+      if (pane.key === activeKey && pane.isCodePage) {
+        this.props.setCurrentCode(pane.code);
+        this.props.setCurrentShaderType(pane.language);
+        this.props.setNeedUpdate(true);
       }
     });
     this.props.activeTab(activeKey);
@@ -288,8 +289,6 @@ export default class PageTabs extends Component<any, any> {
     });
     this.props.setTabs(arr);
   };
-
-  tmpRef = React.createRef() as any;
 
   runCode = () => {
     let {activeKey, panes} = this.props.tabs;
