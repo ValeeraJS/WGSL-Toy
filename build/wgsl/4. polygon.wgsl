@@ -18,8 +18,8 @@ fn sdPolygon(pp: vec2<f32>, radius: f32, n: i32, rotation: f32) -> f32 {
     var bn: f32 = (atan2(p.x , p.y) + rotation) % (2.0 * an) - an;
     p = length(p) * vec2<f32>(cos(bn), abs(sin(bn)));
     p = p - radius * acs;
-    p = p + ecs * clamp(-dot(p,ecs), 0.0, radius * acs.y / ecs.y);
-    return p.x ;
+    p = p + ecs * clamp(-dot(p, ecs), 0.0, radius * acs.y / ecs.y);
+    return p.x;
 }
 
 [[stage(fragment)]] fn main() -> void {
@@ -27,7 +27,7 @@ fn sdPolygon(pp: vec2<f32>, radius: f32, n: i32, rotation: f32) -> f32 {
     var p: vec2<f32> = fragCoord * vec2<f32>(1., aspect);
 
     var m: f32 = 2.0;
-    var d: f32 = sdPolygon(p, 0.5, EDGE_COUNT, uniforms.mouse.x / uniforms.resolution.x * 2.);
+    var d: f32 = sdPolygon(p, uniforms.mouse.y / uniforms.resolution.y, EDGE_COUNT, uniforms.mouse.x / uniforms.resolution.x * 2.);
 
     if (d < 0.) {
         fragColor = vec4<f32>(1., 1., 1., 1.0);

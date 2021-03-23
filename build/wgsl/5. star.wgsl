@@ -22,8 +22,8 @@ fn sdStar(pp: vec2<f32>, radius: f32, n: i32, m: f32, rotation: f32) -> f32 {
 
     // line sdf
     p = p - radius * acs;
-    p = p + ecs * clamp(-dot(p,ecs), 0.0, radius * acs.y / ecs.y);
-    return length(p)*sign(p.x);
+    p = p + ecs * clamp(-dot(p, ecs), 0.0, radius * acs.y / ecs.y);
+    return length(p) * sign(p.x);
 }
 
 [[stage(fragment)]] fn main() -> void {
@@ -31,7 +31,7 @@ fn sdStar(pp: vec2<f32>, radius: f32, n: i32, m: f32, rotation: f32) -> f32 {
     var p: vec2<f32> = fragCoord * vec2<f32>(1., aspect);
 
     var m: f32 = 2.0;
-    var d: f32 = sdStar(p, 0.5, EDGE_COUNT, uniforms.mouse.y / uniforms.resolution.y * 4. + 1.0, uniforms.mouse.x / uniforms.resolution.x * 2.);
+    var d: f32 = sdStar(p, 0.5, EDGE_COUNT, uniforms.mouse.y / uniforms.resolution.y * 4.0 + 1.0, uniforms.mouse.x / uniforms.resolution.x * 2.);
 
     if (d < 0.) {
         fragColor = vec4<f32>(1., 1., 0., 1.0);
