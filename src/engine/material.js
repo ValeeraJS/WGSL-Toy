@@ -36,9 +36,21 @@ function getWgslModule(device, source) {
 function getGlslModule(device, source, glslang) {
     let startTime = Date.now();
     device.pushErrorScope('validation');
-    console.log(source)
+    let binCode;
+
+    try {
+        binCode = glslang.compileGLSL(source, 'fragment')
+    } catch (e) {
+        store.dispatch(setMessage({
+            type: MSG_TYPE.ERROR,
+            text: e.message,
+            date: Date.now()
+        }));
+        return;
+    }
+
     const shaderModule = device.createShaderModule({
-        code: glslang.compileGLSL(source, 'fragment'),
+        code: binCode,
     });
 
     device.popErrorScope().then(err => {
@@ -85,9 +97,12 @@ export default class Material {
 
     changeFS(fs, isGlsl = false) {
         this.fs = fs;
-        this.fragmentStage = {
-            module: isGlsl ? getGlslModule(this.device, fs, this.glslang) : getWgslModule(this.device, fs),
-            entryPoint: "main"
-        };
+        let module = isGlsl ? getGlslModule(this.device, fs, this.glslang) : getWgslModule(this.device, fs);
+        if (module) {
+            this.fragmentStage = {
+                module, 
+                entryPoint: "main"
+            };
+        }
     }
 } 
