@@ -26,8 +26,8 @@ function RightSide(props: IRightProps) {
   return (
     <div className={styles.rightside} ref={ref as any}>
       <RenderingAreaWebGPU id="webgpuTarget" width={width} height={height}/>
-      <RenderingAreaWebGL2  id="webgl2Target" width={width} height={height}/>
-      <RenderingAreaWebGL  id="webglTarget" width={width} height={height}/>
+      <RenderingAreaWebGL2 id="webgl2Target" width={width} height={height}/>
+      <RenderingAreaWebGL id="webglTarget" width={width} height={height}/>
       
       <div className={styles.toolbar}>
         <span className={styles.sizetext}>{width}×{height}</span>
