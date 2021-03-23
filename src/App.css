@@ -98,6 +98,17 @@
   color: #e5ecf0 !important;
 }
 
+.ant-dropdown-menu-item-disabled {
+  background-color: #3c3c3c !important;
+  color: #ccc !important;
+  text-decoration: line-through;
+}
+
+.ant-dropdown-menu-item-disabled:hover {
+  background-color: #3c3c3c !important;
+  color: #ccc !important;
+}
+
 .ant-dropdown {
   min-width: 288px;
 }
