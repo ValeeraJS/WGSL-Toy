@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import getDefaultCode from '../coomon/defaultCode';
+import getDefaultCode from '../common/defaultCode';
 
 export enum ShaderType {
 	WGSL = "WGSL",

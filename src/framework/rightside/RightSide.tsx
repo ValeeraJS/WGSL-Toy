@@ -1,10 +1,10 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import styles from './RightSide.module.css';
 import { useResizeDetector } from 'react-resize-detector';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import IconButton from '../mainarea/IconButton';
 import { useSelector, useDispatch } from "react-redux";
-import { fullscreen, setFullscreen } from '../../features/editor/runtimeSlice';
+import { fps, fullscreen, setFullscreen } from '../../features/editor/runtimeSlice';
 import { currentShaderType, ShaderType } from '../../features/editor/shaderSlice';
 import RenderingAreaWebGPU, { f32BufferArray } from './RenderingAreaWebGPU';
 
@@ -13,12 +13,9 @@ interface IRightProps {
   width?: number;
 }
 
-export const fpsText = {
-  ref: createRef() as any
-}
-
 function RightSide(props: IRightProps) {
   const dispatch = useDispatch();
+  const fpsInfo = useSelector(fps);
   const shaderType = useSelector(currentShaderType);
   const isFullscreen = useSelector(fullscreen);
   const { width, height, ref } = useResizeDetector();
@@ -35,7 +32,7 @@ function RightSide(props: IRightProps) {
       }}></canvas>
       <div className={styles.toolbar}>
         <span className={styles.sizetext}>{width}×{height}</span>
-        <span className={styles.sizetext} ref={fpsText.ref}></span>
+        <span className={styles.sizetext}>{fpsInfo.toFixed(2)}fps</span>
         <IconButton icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} onClick={() => {
           if (isFullscreen) {
             document.exitFullscreen();

@@ -8,9 +8,10 @@ import Renderer from "../../engine/renderer";
 import { GeometryNode, Geometry } from "../../engine/geometry.js";
 import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
-import { fpsText } from "../rightside/RightSide";
 import glslangModule from '../../engine/glsllang';
-import getDefaultCode from "../../features/coomon/defaultCode";
+import getDefaultCode from "../../features/common/defaultCode";
+import { store } from "../../app/store";
+import { setFPS } from "../../features/editor/runtimeSlice";
 
 export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
     const shaderType = useSelector(currentShaderType);
@@ -77,9 +78,7 @@ export async function init(canvas: any) {
     }
 
     setInterval(() => {
-        if (fpsText.ref.current) {
-            fpsText.ref.current.innerText = (1000 / deltaTime).toFixed(2) + "fps";
-        }
+        store.dispatch(setFPS(1000 / deltaTime))
     }, 1000)
 
     return frame;

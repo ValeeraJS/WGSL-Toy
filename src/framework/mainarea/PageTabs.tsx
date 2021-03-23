@@ -24,7 +24,7 @@ import {
   setTabs,
   TabDescripter,
 } from "../../features/editor/tabSlice";
-import getDefaultCode from "../../features/coomon/defaultCode";
+import getDefaultCode from "../../features/common/defaultCode";
 
 const { TabPane } = Tabs;
 
@@ -37,6 +37,7 @@ interface TabTitleProps {
   onCopyPage?: any;
   onCloseOther?: any;
   onCloseRight?: any;
+  onRenameTab?: any;
 }
 
 interface TabTitleState {
@@ -50,15 +51,10 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
     isEdit: false,
   };
 
-  inputRef = React.createRef() as any;
-
   rename = () => {
     this.setState(
       {
         isEdit: true,
-      },
-      () => {
-        this.inputRef?.current?.select();
       }
     );
   };
@@ -67,6 +63,7 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
     this.setState({
       isEdit: false,
     });
+    this.props.onRenameTab(this.state.name, this.props.keyId);
   };
 
   changeName = (e: any) => {
@@ -123,6 +120,12 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
     </Menu>
   );
 
+  checkFinishEdit = (e: any) => {
+    if (e.keyCode === 13) {
+      this.finishEdit(); 
+    }
+  }
+
   render() {
     const { name, isEdit } = this.state;
     return (
@@ -132,12 +135,12 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
             <input
               maxLength={16}
               onSelect={this.textSelect}
-              ref={this.inputRef}
               type="text"
               value={name}
               className={styles.renameinput}
               onBlur={this.finishEdit}
               onChange={this.changeName}
+              onKeyDown={this.checkFinishEdit}
             />
           ) : (
             <>{name || "Untitled"}{getShaderSuffix(this.props.language)}</>
@@ -193,6 +196,17 @@ export default class PageTabs extends Component<any, any> {
     });
     this.props.activeTab(activeKey);
   };
+
+  onRenameTab = (name: string, activeKey: string) => {
+    let {panes} = this.props.tabs;
+    panes.forEach((pane: any, i: number) => {
+      if (pane.key === activeKey) {
+        let result = {...pane};
+        result.title = name;
+        this.props.editTab(result);
+      }
+    });
+  }
 
   onEdit = (targetKey: any, action: React.ReactText) => {
     (this as any)[action](targetKey);
@@ -344,6 +358,7 @@ export default class PageTabs extends Component<any, any> {
                         name={pane.title}
                         keyId={pane.key}
                         language={pane.language as ShaderType}
+                        onRenameTab={this.onRenameTab}
                         onCloseRight={this.onCloseRight}
                         onCloseOther={this.onCloseOther}
                         onDel={this.remove}

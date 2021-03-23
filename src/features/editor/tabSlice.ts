@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import getDefaultCode from '../coomon/defaultCode';
+import getDefaultCode from '../common/defaultCode';
 import { ShaderType } from './shaderSlice';
 
 interface TabState {
