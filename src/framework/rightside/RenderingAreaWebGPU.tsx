@@ -8,7 +8,6 @@ import Renderer from "../../engine/renderer";
 import { GeometryNode, Geometry } from "../../engine/geometry.js";
 import Material from "../../engine/material.js";
 import Mesh from "../../engine/mesh.js";
-import { setMsgOut } from "../ConsoleBar/ConsoleBar";
 import { fpsText } from "../rightside/RightSide";
 import glslangModule from '../../engine/glsllang';
 
@@ -37,12 +36,10 @@ export async function init(canvas: any) {
     const glslang = await glslangModule();
     const adapter = await navigator.gpu?.requestAdapter();
     if (!adapter) {
-        setMsgOut(<div style={{color: 'yellow'}}>Your browser doesn't support WebGPU, please use newest Chrome Canary.</div>);
         return () => {};
     }
     const device = await adapter.requestDevice();
     if (!device) {
-        setMsgOut(<div style={{color: 'yellow'}}>Your browser doesn't support WebGPU, please use newest Chrome Canary.</div>);
         return () => {};
     }
     const renderer = new Renderer(device, canvas);

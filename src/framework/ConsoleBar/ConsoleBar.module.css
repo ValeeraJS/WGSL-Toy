@@ -20,3 +20,19 @@
   padding-left: 18px;
   overflow: auto;
 }
+
+.warning {
+  color: #e5e510;
+}
+
+.success {
+  color: #24fa48;
+}
+
+.error {
+  color: #d10e0e;
+}
+
+.info {
+  color: #cccccc;
+}

@@ -1,4 +1,5 @@
-import {setMsgOut} from '../framework/ConsoleBar/ConsoleBar';
+import {setMessage, MSG_TYPE} from '../features/editor/logSlice';
+import {store} from './../app/store';
 
 function getWgslModule(device, source) {
     let startTime = Date.now();
@@ -9,13 +10,22 @@ function getWgslModule(device, source) {
 
     device.popErrorScope().then(err => {
         if (err) {
-            /// setMsgOut(err.message);
+            store.dispatch(setMessage({
+                type: MSG_TYPE.ERROR,
+                text: err.message,
+                date: Date.now()
+            }));
         } else {
             let time = Date.now() - startTime;
-            // setMsgOut(<div>
-            //     <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
-            //     <div>Compiled in {time} ms.</div>
-            // </div>);
+            store.dispatch(setMessage([{
+                type: MSG_TYPE.SUCCESS,
+                text: 'Shader compiled successfully.',
+                date: Date.now()
+            }, {
+                type: MSG_TYPE.SUCCESS,
+                text: `Compiled in ${time} ms.`,
+                date: Date.now()
+            }]));
         }
     });
 
@@ -23,7 +33,6 @@ function getWgslModule(device, source) {
 }
 
 function getGlslModule(device, source, glslang) {
-    console.log(source, glslang)
     let startTime = Date.now();
     device.pushErrorScope('validation');
     const shaderModule = device.createShaderModule({
@@ -32,13 +41,22 @@ function getGlslModule(device, source, glslang) {
 
     device.popErrorScope().then(err => {
         if (err) {
-            /// setMsgOut(err.message);
+            store.dispatch(setMessage({
+                type: MSG_TYPE.ERROR,
+                text: err.message,
+                date: Date.now()
+            }));
         } else {
             let time = Date.now() - startTime;
-            // setMsgOut(<div>
-            //     <div style={{color: "#45FF56"}}>Shader compiled successfully.</div>
-            //     <div>Compiled in {time} ms.</div>
-            // </div>);
+            store.dispatch(setMessage([{
+                type: MSG_TYPE.SUCCESS,
+                text: 'Shader compiled successfully.',
+                date: Date.now()
+            }, {
+                type: MSG_TYPE.SUCCESS,
+                text: `Compiled in ${time} ms.`,
+                date: Date.now()
+            }]));
         }
     });
 

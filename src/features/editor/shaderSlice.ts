@@ -22,6 +22,12 @@ let webgpuS = !!document.createElement("canvas").getContext("gpupresent");
 let webgl2S = !!document.createElement("canvas").getContext("webgl2");
 let webglS = !!document.createElement("canvas").getContext("webgl");
 
+export const SUPPORT_STATE = {
+	WebGPU: webgpuS,
+	WebGL2: webgl2S,
+	WebGL: webglS
+}
+
 const initialState: ShaderState = {
 	needUpdate: false,
 	currentCode: "",
