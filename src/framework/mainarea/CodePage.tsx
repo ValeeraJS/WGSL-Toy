@@ -7,10 +7,11 @@ import { bindActionCreators } from "@reduxjs/toolkit";
 import {
   setCurrentCode,
   setCurrentShaderType,
+  ShaderType,
 } from "../../features/editor/shaderSlice";
 import { editTab, TabDescripter } from "../../features/editor/tabSlice";
 
-// 设置语法高亮和代码提示
+// 设置wgsl语法高亮和代码提示
 function handleEditorBeforeMountWGSL(monaco: any) {
   monaco.languages.register({ id: "wgsl" });
 
@@ -36,7 +37,6 @@ function handleEditorBeforeMountWGSL(monaco: any) {
       "var<in>",
       "var<out>",
       "var<uniform>",
-      "var",
       "fn",
       "location",
       "offset",
@@ -164,13 +164,145 @@ function handleEditorBeforeMountWGSL(monaco: any) {
   });
 }
 
-// interface CodePageProps {
-//   key: string;
-//   code: string;
-//   language: string;
-//   tabs: RootState["tabs"];
-//   shader: RootState["shader"];
-// }
+// 设置glsl语法高亮和代码提示
+function handleEditorBeforeMountGLSL(monaco: any) {
+  monaco.languages.register({ id: "glsl" });
+
+  // Register a tokens provider for the language
+  monaco.languages.setMonarchTokensProvider("glsl", {
+    comments: {
+      lineComment: "//",
+      blockComment: ["/*", "*/"],
+    },
+    keywords: [
+      "continue",
+      "for",
+      "switch",
+      "if",
+      "break",
+      "else",
+      "case",
+      "void",
+      "const",
+      "true",
+      "false",
+      "var",
+      "var",
+      "fn",
+      "layout",
+      "offset",
+      "block",
+      "struct",
+      "binding",
+      "group",
+      "stage",
+    ],
+    types: [
+      "in",
+      "out",
+      "uniform",
+      "sampler",
+      "int",
+      "float",
+      "bool",
+      "texture_2d",
+      "Uniforms",
+      "vec2",
+      "vec3",
+      "vec4",
+      "mat2",
+      "mat3",
+      "mat4"
+    ],
+    funcs: [
+      "abs",
+      "atan",
+      "atan2",
+      "clamp",
+      "ceil",
+      "cos",
+      "cross",
+      "distance",
+      "dot",
+      "floor",
+      "fma",
+      "fract",
+      "length",
+      "log",
+      "log2",
+      "main",
+      "max",
+      "min",
+      "mix",
+      "modf",
+      "normalize",
+      "pow",
+      "reflect",
+      "sin",
+      "smoothstep",
+    ],
+    special: ["#version", "return", "location"],
+    symbols: /[=><!~?:&|+\-*/^%]+/,
+    escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+    digits: /\d+(_+\d+)*/,
+    tokenizer: {
+      root: [
+        [/\/\/[^\n]*/, "comment"],
+        [
+          /[a-zA-Z_$#][\w$]*/,
+          {
+            cases: {
+              "@keywords": { token: "keyword.$0" },
+              "@types": "types",
+              "@funcs": "funcs",
+              "@special": "special",
+              "@default": "identifier",
+            },
+          },
+        ],
+        [/(@digits)[eE]([-+]?(@digits))?[fFdD]?/, "number"],
+        [/(@digits)\.(@digits)([eE][-+]?(@digits))?[fFdD]?/, "number"],
+        [/(@digits)[fFdD]/, "number"],
+        [/(@digits)[lL]?/, "number"],
+      ],
+    },
+  });
+
+  // Define a new theme that contains only rules that match this language
+  monaco.editor.defineTheme("vs-dark-glsl", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+      // { token: 'identifier', foreground: 'dcdc9d' },
+      { token: "funcs", foreground: "d0dcaa" },
+      { token: "types", foreground: "4ec9b0" },
+      { token: "special", foreground: "c582b6" },
+      { token: "number", foreground: "b5c078" },
+      { token: "comment", foreground: "529955" },
+    ],
+  });
+
+  // Register a completion item provider for the new language
+  monaco.languages.registerCompletionItemProvider("glsl", {
+    provideCompletionItems: () => {
+      var suggestions = [
+        {
+          label: "ifelse",
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: `if (\${1:condition}) {
+                    \t$0
+                } else {
+                    \t
+                }`,
+          insertTextRules:
+            monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: "If-Else Statement",
+        }
+      ];
+      return { suggestions };
+    },
+  });
+}
 
 @(connect(
   (state: RootState) => {
@@ -208,6 +340,7 @@ export default class CodePage extends Component<any> {
   };
 
   render() {
+    const {language, code} = this.props;
     return (
       <Dropzone
         noClick
@@ -229,12 +362,11 @@ export default class CodePage extends Component<any> {
             <div style={{ height: "100%" }} {...getRootProps()}>
               <Editor
                 height="100%"
-                theme="vs-dark-wgsl"
-                defaultLanguage="wgsl"
-                defaultValue={this.props.code}
-                value={this.props.code}
+                theme={language === ShaderType.WGSL ? "vs-dark-wgsl" : "vs-dark-glsl"}
+                defaultLanguage={language === ShaderType.WGSL ? "wgsl" : "glsl"}
+                value={code}
                 onChange={this.updateCode}
-                beforeMount={handleEditorBeforeMountWGSL}
+                beforeMount={language === ShaderType.WGSL ? handleEditorBeforeMountWGSL : handleEditorBeforeMountGLSL}
               />
             </div>
           );

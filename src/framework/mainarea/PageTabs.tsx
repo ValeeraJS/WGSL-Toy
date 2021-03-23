@@ -366,7 +366,7 @@ export default class PageTabs extends Component<any, any> {
                         onCopyPage={this.onCopyPage}
                       />
                     );
-                    let codePage = <CodePage language={pane.language as string} code={pane.code} keyName={pane.key}/>
+                    let codePage = <CodePage language={pane.language} code={pane.code} keyName={pane.key}/>
                     return (
                       <TabPane tab={title} key={pane.key} closable>
                         {codePage}
