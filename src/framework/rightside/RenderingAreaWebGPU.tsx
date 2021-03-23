@@ -41,7 +41,7 @@ export default function RenderingAreaWebGpu(props: IRenderingAreaProps) {
       style={{
         display:
           shaderType === ShaderType.WGSL || shaderType === ShaderType.ES45
-            ? "auto"
+            ? ""
             : "none",
       }}
     ></canvas>
@@ -85,18 +85,23 @@ export async function init(canvas: any) {
   mesh = new Mesh(device, geo, material);
 
   function frame() {
-    renderer.clear();
-    uniformBufferArray[4] = performance.now() / 1000;
-    renderer.render(mesh, uniformBufferArray);
-    renderer.end();
-    deltaTime = performance.now() - lastTime;
-    lastTime = performance.now();
+    if (store.getState().shader.currentShaderType === ShaderType.WGSL || store.getState().shader.currentShaderType === ShaderType.ES45) {
+      renderer.clear();
+      uniformBufferArray[4] = performance.now() / 1000;
+      renderer.render(mesh, uniformBufferArray);
+      renderer.end();
+      deltaTime = performance.now() - lastTime;
+      lastTime = performance.now();
+    }
+
     fIndex = requestAnimationFrame(frame);
     return fIndex;
   }
 
   setInterval(() => {
-    store.dispatch(setFPS(1000 / deltaTime));
+    if (store.getState().shader.currentShaderType === ShaderType.WGSL || store.getState().shader.currentShaderType === ShaderType.ES45) {
+      store.dispatch(setFPS(1000 / deltaTime));
+    }
   }, 1000);
 
   return frame;
