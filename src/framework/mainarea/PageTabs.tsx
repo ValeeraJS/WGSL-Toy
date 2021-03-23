@@ -52,11 +52,9 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
   };
 
   rename = () => {
-    this.setState(
-      {
-        isEdit: true,
-      }
-    );
+    this.setState({
+      isEdit: true,
+    });
   };
 
   finishEdit = () => {
@@ -122,9 +120,9 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
 
   checkFinishEdit = (e: any) => {
     if (e.keyCode === 13) {
-      this.finishEdit(); 
+      this.finishEdit();
     }
-  }
+  };
 
   render() {
     const { name, isEdit } = this.state;
@@ -143,7 +141,10 @@ class TabTitle extends Component<TabTitleProps, TabTitleState> {
               onKeyDown={this.checkFinishEdit}
             />
           ) : (
-            <>{name || "Untitled"}{getShaderSuffix(this.props.language)}</>
+            <>
+              {name || "Untitled"}
+              {getShaderSuffix(this.props.language)}
+            </>
           )}
         </span>
       </Dropdown>
@@ -176,7 +177,7 @@ function getShaderSuffix(type: ShaderType) {
         activeTab,
         removeTab,
         editTab,
-        setTabs
+        setTabs,
       },
       dispatch
     );
@@ -186,7 +187,7 @@ export default class PageTabs extends Component<any, any> {
   newTabIndex = 0;
 
   onChange = (activeKey: string) => {
-    let {panes} = this.props.tabs;
+    let { panes } = this.props.tabs;
     panes.forEach((pane: any, i: number) => {
       if (pane.key === activeKey && pane.isCodePage) {
         this.props.setCurrentCode(pane.code);
@@ -198,15 +199,15 @@ export default class PageTabs extends Component<any, any> {
   };
 
   onRenameTab = (name: string, activeKey: string) => {
-    let {panes} = this.props.tabs;
+    let { panes } = this.props.tabs;
     panes.forEach((pane: any, i: number) => {
       if (pane.key === activeKey) {
-        let result = {...pane};
+        let result = { ...pane };
         result.title = name;
         this.props.editTab(result);
       }
     });
-  }
+  };
 
   onEdit = (targetKey: any, action: React.ReactText) => {
     (this as any)[action](targetKey);
@@ -236,7 +237,7 @@ export default class PageTabs extends Component<any, any> {
   };
 
   remove = (targetKey: string) => {
-    let {activeKey, panes} = this.props.tabs;
+    let { activeKey, panes } = this.props.tabs;
     let newActiveKey = activeKey;
     let lastIndex: number = -1;
     panes.forEach((pane: any, i: number) => {
@@ -254,15 +255,27 @@ export default class PageTabs extends Component<any, any> {
     }
     this.props.removeTab(targetKey);
     this.props.activeTab(newActiveKey);
+    if (newActiveKey) {
+      panes.forEach((pane: TabDescripter) => {
+        if (pane.key === newActiveKey) {
+          this.props.setCurrentShaderType(pane.language);
+          this.props.setCurrentCode(pane.code);
+          this.props.setNeedUpdate(true);
+        }
+      });
+    }
   };
 
   onSaveCode = (targetKey: string, name: string = "Untitled") => {
     this.props.tabs.panes.forEach((pane: TabDescripter) => {
       if (pane.key === targetKey) {
-        const blob = new Blob([pane.code || ''], {
+        const blob = new Blob([pane.code || ""], {
           type: "text/plain",
         });
-        BlobDownloader.download(blob as any, (name || 'Untitled') + getShaderSuffix(pane.language as ShaderType));
+        BlobDownloader.download(
+          blob as any,
+          (name || "Untitled") + getShaderSuffix(pane.language as ShaderType)
+        );
       }
     });
   };
@@ -300,7 +313,7 @@ export default class PageTabs extends Component<any, any> {
   };
 
   runCode = () => {
-    let {activeKey, panes} = this.props.tabs;
+    let { activeKey, panes } = this.props.tabs;
     panes.forEach((pane: TabDescripter) => {
       if (pane.key === activeKey) {
         this.props.setCurrentShaderType(pane.language);
@@ -323,11 +336,7 @@ export default class PageTabs extends Component<any, any> {
               let reader = new FileReader();
               reader.readAsText(files[i]);
               reader.onload = () => {
-                this.add(
-                  files[i].name,
-                  files[i].name,
-                  reader.result as string
-                );
+                this.add(files[i].name, files[i].name, reader.result as string);
               };
             }
           }
@@ -366,7 +375,13 @@ export default class PageTabs extends Component<any, any> {
                         onCopyPage={this.onCopyPage}
                       />
                     );
-                    let codePage = <CodePage language={pane.language} code={pane.code} keyName={pane.key}/>
+                    let codePage = (
+                      <CodePage
+                        language={pane.language}
+                        code={pane.code}
+                        keyName={pane.key}
+                      />
+                    );
                     return (
                       <TabPane tab={title} key={pane.key} closable>
                         {codePage}
