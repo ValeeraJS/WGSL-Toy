@@ -14,14 +14,14 @@ float sdfSquare(vec2 uv, vec2 center, float radius) {
 
 void main() {
     float aspect = uniforms.resolution.y / uniforms.resolution.x;
-    vec2 uv = fragCoord * vec2(1.0, -aspect);
-    vec2 mouse = (uniforms.mouse * 2. - uniforms.resolution) / uniforms.resolution.xx;
+    vec2 uv = fragCoord * vec2(1, -aspect);
+    vec2 mouse = (uniforms.mouse * 2 - uniforms.resolution) / uniforms.resolution.xx;
     float d = sdfSquare(uv, mouse, 0.5);
 
     if (d < 0.) {
-        fragColor = vec4(1., 1., 1., 1.0);
+        fragColor = vec4(1, 1, 1, 1);
     } else {
-        fragColor = vec4(0., 0., 0., 1.0);
+        fragColor = vec4(0, 0, 0, 1);
     }
     
     return;

@@ -14,14 +14,14 @@ float sdfEllipse(vec2 uv, vec2 f1, vec2 f2, float a) {
 
 void main() {
     float aspect = uniforms.resolution.y / uniforms.resolution.x;
-    vec2 uv = fragCoord * vec2(1.0, -aspect);
-    vec2 mouse = (uniforms.mouse * 2. - uniforms.resolution) / uniforms.resolution.xx;
-    float d = sdfEllipse(uv, mouse, mouse * -1., 1.0);
+    vec2 uv = fragCoord * vec2(1, -aspect);
+    vec2 mouse = (uniforms.mouse * 2 - uniforms.resolution) / uniforms.resolution.xx;
+    float d = sdfEllipse(uv, mouse, mouse * -1, 1);
 
     if (d < 0.) {
-        fragColor = vec4(1., 1., 1., 1.0);
+        fragColor = vec4(1, 1, 1, 1);
     } else {
-        fragColor = vec4(0., 0., 0., 1.0);
+        fragColor = vec4(0, 0, 0, 1);
     }
     
     return;

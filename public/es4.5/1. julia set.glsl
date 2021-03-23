@@ -25,5 +25,5 @@ void main() {
         z.y = y;
     }
     float val = float(i) / float(MAX_ITER);
-    fragColor = vec4(1. - val, 1. - val, 1. - val, 1.);
+    fragColor = vec4(val, val, val, 1);
 }
