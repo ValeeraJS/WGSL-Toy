@@ -22,7 +22,16 @@ void main() {
 varying vec2 fragCoord;
 
 void main() {
-    gl_FragColor = vec4(fragCoord, 0.0, 1.0);
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+}
+`;
+    } else if (shaderType === ShaderType.ES30) {
+        return `#version 300 es
+precision highp float;
+out vec4 fragColor;
+
+void main() {
+    fragColor = vec4(1, 0, 0, 1);
 }
 `;
     }

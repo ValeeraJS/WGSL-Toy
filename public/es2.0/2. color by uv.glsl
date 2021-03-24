@@ -6,5 +6,5 @@ uniform float time;
 varying vec2 fragCoord;
 
 void main() {
-    gl_FragColor = vec4((fragCoord + 1.) * 0.5, 0., 1.);
+    gl_FragColor = vec4((fragCoord + 1.0) * 0.5, 0.0, 1.0);
 }
