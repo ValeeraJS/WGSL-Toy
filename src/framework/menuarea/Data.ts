@@ -10,7 +10,7 @@ export const treeData = [
         ],
     },
     {
-        title: "Distance Field",
+        title: "Signed Distance Field",
         key: "0-1",
         children: [
             { title: "1. circle", key: "0-1-0", isLeaf: true },
@@ -38,3 +38,24 @@ export const treeData = [
         ],
     },
 ];
+
+export function filterTree(tree: any[], text: string) {
+    let result: any[] = [];
+    for (let item of tree) {
+        if (item.title.includes(text)) {
+            result.push({
+                ...item
+            });
+        } else {
+            let childResult = filterTree(item.children || [], text);
+            if (childResult.length) {
+                result.push({
+                    ...item,
+                    children: childResult
+                });
+            }
+        }
+    }
+
+    return result;
+}
