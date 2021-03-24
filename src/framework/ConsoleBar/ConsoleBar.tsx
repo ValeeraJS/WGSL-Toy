@@ -22,9 +22,10 @@ export default function ConsoleBar() {
                 msgs.map(msg => {
                     if (msg.type === MSG_TYPE.WARNING) {
                         return <div key={msg.text} className={styles.warning}>{msg.text}</div>
-                    }
-                    if (msg.type === MSG_TYPE.SUCCESS) {
+                    } else if (msg.type === MSG_TYPE.SUCCESS) {
                         return <div key={msg.text} className={styles.success}>{msg.text}</div>
+                    } else if (msg.type === MSG_TYPE.ERROR) {
+                        return <div key={msg.text} className={styles.error}>{msg.text}</div>
                     }
                     return <div key={msg.text} className={styles.info}>{msg.text}</div>
                 })

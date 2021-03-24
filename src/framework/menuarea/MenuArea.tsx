@@ -53,6 +53,10 @@ function getFilePath(name: string, type: ShaderType): string {
     return "./wgsl/" + name + ".wgsl";
   } else if (type === ShaderType.ES45) {
     return "./es4.5/" + name + ".glsl";
+  } else if (type === ShaderType.ES30) {
+    return "./es3.0/" + name + ".glsl";
+  } else if (type === ShaderType.ES20) {
+    return "./es2.0/" + name + ".glsl";
   } 
   return name;
 }

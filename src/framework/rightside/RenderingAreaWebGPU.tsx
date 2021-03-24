@@ -114,7 +114,7 @@ export const wgslShaders = {
 [[stage(vertex)]]
 fn main() -> void {
 	out_position = vec4<f32>(a_position, 0.0, 1.0);
-    fragCoord = a_position;
+  fragCoord = a_position;
 	return;
 }
 `,
