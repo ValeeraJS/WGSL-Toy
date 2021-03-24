@@ -21,8 +21,8 @@ const initialState: TabState = {
     activeKey: 'hello world',
 	panes: [{
         title: 'HelloWorld',
-        language: ShaderType.WGSL,
-        code: getDefaultCode(ShaderType.WGSL),
+        language: ShaderType.ES20,
+        code: getDefaultCode(ShaderType.ES20),
         isCodePage: true,
         key: 'hello world',
         content: ''

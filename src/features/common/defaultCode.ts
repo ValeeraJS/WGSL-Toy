@@ -18,8 +18,11 @@ void main() {
 }
 `;
     } else if (shaderType === ShaderType.ES20) {
-        return `void main() {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        return `precision highp float;
+varying vec2 fragCoord;
+
+void main() {
+    gl_FragColor = vec4(fragCoord, 0.0, 1.0);
 }
 `;
     }

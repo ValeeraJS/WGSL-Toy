@@ -1,12 +1,9 @@
-#version 450
-layout(set = 0, binding = 0) uniform Uniforms {
-    vec2 mouse;
-    vec2 resolution;
-    float time;
-} uniforms;
+precision highp float;
+uniform vec2 mouse;
+uniform vec2 resolution;
+uniform float time;
 
-layout(location = 0) in vec2 fragCoord;
-layout(location = 0) out vec4 fragColor;
+varying vec2 fragCoord;
 
 #define MAX_ITER 150
 #define c vec2(0.01, 1.02)
@@ -14,16 +11,18 @@ layout(location = 0) out vec4 fragColor;
 
 void main() {
     vec2 z = fragCoord;
-    int i = 0;
-    for (i = 0; i < MAX_ITER; i++) {
-        float x = (z.x * z.x - z.y * z.y) + uniforms.mouse.x / uniforms.resolution.x;
-        float y = (z.x * z.y + z.x * z.y) + uniforms.mouse.y / uniforms.resolution.y;
+    int ii = 0;
+    for (int i = 0; i < MAX_ITER; i++) {
+        float x = (z.x * z.x - z.y * z.y) + mouse.x / resolution.x;
+        float y = (z.x * z.y + z.x * z.y) + mouse.y / resolution.y;
         if ((x * x + y * y) > epsilon) {
+            ii = i;
             break;
         } 
         z.x = x;
         z.y = y;
+        ii = i;
     }
-    float val = float(i) / float(MAX_ITER);
-    fragColor = vec4(val, val, val, 1);
+    float val = float(ii) / float(MAX_ITER);
+    gl_FragColor = vec4(val, val, val, 1.0);
 }

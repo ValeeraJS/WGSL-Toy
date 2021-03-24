@@ -1,4 +1,3 @@
-import React from "react";
 import { IRenderingAreaProps } from "./IRenderingArea";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -112,10 +111,10 @@ function initVertexBuffers(gl: WebGLRenderingContext, program: WebGLProgram) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, verticesData, gl.STATIC_DRAW);
 
-  // Assign the vertices in buffer object to a_Position variable
-  var a_Position = gl.getAttribLocation(program, "a_Position");
-  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(a_Position);
+  // Assign the vertices in buffer object to position variable
+  var position = gl.getAttribLocation(program, "position");
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(position);
 }
 
 let lastTime = performance.now();
@@ -126,12 +125,12 @@ function updateMaterialShader(code: string = "") {
   initShaders(gl, vs, code);
 }
 
-const vs = `attribute vec2 a_Position;
+const vs = `attribute vec4 position;
 varying vec2 fragCoord;
 
 void main() {
-  fragCoord = a_Position;
-  gl_Position = vec4(a_Position, 0.0, 0.0);
+  fragCoord = position.xy;
+  gl_Position = position;
 }`;
 
 let gl: WebGLRenderingContext;
@@ -141,32 +140,39 @@ async function init(canvas: HTMLCanvasElement) {
   gl = canvas.getContext("webgl") as WebGLRenderingContext;
   const fs = getDefaultCode(ShaderType.ES20);
 
-  const program = initShaders(gl, vs, fs);
-  initVertexBuffers(gl, program);
+  glProgram = initShaders(gl, vs, fs);
+  initVertexBuffers(gl, glProgram);
 
   function frame() {
-    uniformBufferArray[4] = performance.now() / 1000;
-    const mouseUniform = gl.getUniformLocation(glProgram, "mouse");
-    gl.uniform2fv(mouseUniform, [uniformBufferArray[0], uniformBufferArray[1]]);
-    const resolutionUniform = gl.getUniformLocation(glProgram, "resolution");
-    gl.uniform2fv(resolutionUniform, [
-      uniformBufferArray[2],
-      uniformBufferArray[3],
-    ]);
-    const timeUniform = gl.getUniformLocation(glProgram, "resolution");
-    gl.uniform1f(timeUniform, uniformBufferArray[4]);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    if (store.getState().shader.currentShaderType === ShaderType.ES20) {
+      uniformBufferArray[4] = performance.now() / 1000;
+      const mouseUniform = gl.getUniformLocation(glProgram, "mouse");
+      gl.uniform2fv(mouseUniform, [
+        uniformBufferArray[0],
+        uniformBufferArray[1],
+      ]);
+      const resolutionUniform = gl.getUniformLocation(glProgram, "resolution");
+      gl.uniform2fv(resolutionUniform, [
+        uniformBufferArray[2],
+        uniformBufferArray[3],
+      ]);
+      const timeUniform = gl.getUniformLocation(glProgram, "time");
+      gl.uniform1f(timeUniform, uniformBufferArray[4]);
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
 
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-    deltaTime = performance.now() - lastTime;
-    lastTime = performance.now();
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      deltaTime = performance.now() - lastTime;
+      lastTime = performance.now();
+    }
     fIndex = requestAnimationFrame(frame);
     return fIndex;
   }
 
   setInterval(() => {
-    store.dispatch(setFPS(1000 / deltaTime));
+    if (store.getState().shader.currentShaderType === ShaderType.ES20) {
+      store.dispatch(setFPS(1000 / deltaTime));
+    }
   }, 1000);
 
   return frame;

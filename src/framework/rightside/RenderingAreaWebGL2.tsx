@@ -1,4 +1,3 @@
-import React from "react";
 import { IRenderingAreaProps } from "./IRenderingArea";
 import { useSelector } from "react-redux";
 import { currentShaderType, ShaderType } from "../../features/editor/shaderSlice";

@@ -15,8 +15,8 @@ void main() {
     vec2 mouses = (mouse * vec2(2.0) - resolution) / resolution.xx;
     float d = sdfCircle(uv, mouses, 0.5);
     if (d < 0.) {
-        gl_FragColor = vec4(1., 1., 1., 1.);
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     } else {
-        gl_FragColor = vec4(0., 0., 0., 1.);
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
 }

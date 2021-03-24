@@ -1,4 +1,3 @@
-import React from "react";
 import { IRenderingAreaProps } from "./IRenderingArea";
 import { useDispatch, useSelector } from "react-redux";
 import {

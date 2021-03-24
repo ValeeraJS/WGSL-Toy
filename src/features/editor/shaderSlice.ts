@@ -31,9 +31,9 @@ export const SUPPORT_STATE = {
 
 const initialState: ShaderState = {
 	needUpdate: false,
-	currentCode: getDefaultCode(webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20),
-	currentShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
-	globalShaderType: webgpuS ? ShaderType.WGSL : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
+	currentCode: getDefaultCode(webgpuS ? ShaderType.ES20 : webgl2S ? ShaderType.ES30 : ShaderType.ES20),
+	currentShaderType: webgpuS ? ShaderType.ES20 : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
+	globalShaderType: webgpuS ? ShaderType.ES20 : webgl2S ? ShaderType.ES30 : ShaderType.ES20,
 	webgpuSupported: webgpuS,
 	webgl2Supported: webgl2S,
 	webglSupported: webglS
