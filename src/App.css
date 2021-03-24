@@ -109,9 +109,9 @@
   color: #ccc !important;
 }
 
-.ant-dropdown {
+/* .ant-dropdown {
   min-width: 288px;
-}
+} */
 
 .ant-dropdown-menu-item-divider {
   background-color: #6f6f6f !important;
