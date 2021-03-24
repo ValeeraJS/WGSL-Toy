@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import getDefaultCode from '../common/defaultCode';
-import { ShaderType } from './shaderSlice';
+import { FirstShaderType, ShaderType } from './shaderSlice';
 
 interface TabState {
     activeKey: string;
@@ -21,8 +21,8 @@ const initialState: TabState = {
     activeKey: 'hello world',
 	panes: [{
         title: 'HelloWorld',
-        language: ShaderType.ES20,
-        code: getDefaultCode(ShaderType.ES20),
+        language: FirstShaderType,
+        code: getDefaultCode(FirstShaderType),
         isCodePage: true,
         key: 'hello world',
         content: ''
