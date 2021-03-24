@@ -119,7 +119,7 @@ function initVertexBuffers(gl: WebGLRenderingContext, program: WebGLProgram) {
 
 let lastTime = performance.now();
 let deltaTime = 0;
-let fff: Function, fIndex: number;
+let fIndex: number;
 
 function updateMaterialShader(code: string = "") {
   initShaders(gl, vs, code);
@@ -189,7 +189,6 @@ let hasCanvas = setInterval(() => {
     canvas.addEventListener("mousemove", renderCanvasMouseMove);
     clearInterval(hasCanvas);
     init(canvas).then((frame) => {
-      fff = frame;
       frame?.();
     });
   }
