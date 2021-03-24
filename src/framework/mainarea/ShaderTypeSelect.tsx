@@ -21,6 +21,11 @@ export const LanguageUtils = {
   },
 };
 
+const MENU_STYLE = {
+  display: "flex",
+  justifyContent: "space-between",
+};
+
 export default function ShaderTypeSelect() {
   const shaderType = useSelector(globalShaderType);
   const webgpuS = useSelector(webgpuSupported);
@@ -36,35 +41,53 @@ export default function ShaderTypeSelect() {
     >
       {webgpuS && (
         <>
-          <Menu.Item key={ShaderType.WGSL}>WebGPU: WGSL</Menu.Item>
-          <Menu.Item key={ShaderType.ES45}>WebGPU: GLSL ES4.5</Menu.Item>
+          <Menu.Item style={MENU_STYLE} key={ShaderType.WGSL}>
+            <span>WebGPU:</span>
+            <span style={{ paddingLeft: 8 }}>WGSL</span>
+          </Menu.Item>
+          <Menu.Item style={MENU_STYLE} key={ShaderType.ES45}>
+            <span>WebGPU:</span>
+            <span style={{ paddingLeft: 8 }}>GLSL ES4.5</span>
+          </Menu.Item>
         </>
       )}
       {webgl2S && (
-        <Menu.Item key={ShaderType.ES30}>WebGL2: GLSL ES3.0</Menu.Item>
+        <Menu.Item style={MENU_STYLE} key={ShaderType.ES30}>
+          <span>WebGL2:</span>
+          <span style={{ paddingLeft: 8 }}>GLSL ES3.0</span>
+        </Menu.Item>
       )}
-      {webglS && <Menu.Item key={ShaderType.ES20}>WebGL: GLSL ES2.0</Menu.Item>}
+      {webglS && (
+        <Menu.Item style={MENU_STYLE} key={ShaderType.ES20}>
+          <span>WebGL:</span>
+          <span style={{ paddingLeft: 8 }}>GLSL ES2.0</span>
+        </Menu.Item>
+      )}
       {(!webgpuS || !webgl2S || !webglS) && (
         <>
           <Menu.Divider />
           {!webgpuS && (
             <>
-              <Menu.Item disabled key={ShaderType.WGSL}>
-                WebGPU: WGSL
+              <Menu.Item style={MENU_STYLE} disabled key={ShaderType.WGSL}>
+                <span>WebGPU:</span>
+                <span style={{ paddingLeft: 8 }}>WGSL</span>
               </Menu.Item>
-              <Menu.Item disabled key={ShaderType.ES45}>
-                WebGPU: GLSL ES4.5
+              <Menu.Item style={MENU_STYLE} disabled key={ShaderType.ES45}>
+                <span>WebGPU:</span>
+                <span style={{ paddingLeft: 8 }}>GLSL ES4.5</span>
               </Menu.Item>
             </>
           )}
           {!webgl2S && (
-            <Menu.Item disabled key={ShaderType.ES30}>
-              WebGL2: GLSL ES3.0
+            <Menu.Item style={MENU_STYLE} disabled key={ShaderType.ES30}>
+              <span>WebGL2:</span>
+              <span style={{ paddingLeft: 8 }}>GLSL ES3.0</span>
             </Menu.Item>
           )}
           {!webglS && (
-            <Menu.Item disabled key={ShaderType.ES20}>
-              WebGL: GLSL ES2.0
+            <Menu.Item style={MENU_STYLE} disabled key={ShaderType.ES20}>
+              <span>WebGL:</span>
+              <span style={{ paddingLeft: 8 }}>GLSL ES2.0</span>
             </Menu.Item>
           )}
         </>
@@ -73,7 +96,7 @@ export default function ShaderTypeSelect() {
   );
 
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown overlay={menu} placement="bottomRight">
       <span
         style={{
           color: "#cccccc",
@@ -82,7 +105,7 @@ export default function ShaderTypeSelect() {
           display: "flex",
         }}
       >
-        Language: {shaderType}
+        {shaderType}
       </span>
     </Dropdown>
   );
