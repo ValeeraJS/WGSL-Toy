@@ -15,7 +15,7 @@ Live demo: https://valeerajs.github.io/WGSL-Toy/build/
 ## Todos
 
 1. grammatical hints (Coming soon)
-2. texture bind
+2. texture bind (Coming soon)
 3. keyboard events
 4. localify
 5. editor settings
