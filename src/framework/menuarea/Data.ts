@@ -39,7 +39,10 @@ export const treeData = [
     },
 ];
 
-export function filterTree(tree: any[], text: string) {
+export function filtTree(tree: any[], text: string) {
+    if (!text) {
+        return tree;
+    }
     let result: any[] = [];
     for (let item of tree) {
         if (item.title.includes(text)) {
@@ -47,7 +50,7 @@ export function filterTree(tree: any[], text: string) {
                 ...item
             });
         } else {
-            let childResult = filterTree(item.children || [], text);
+            let childResult = filtTree(item.children || [], text);
             if (childResult.length) {
                 result.push({
                     ...item,

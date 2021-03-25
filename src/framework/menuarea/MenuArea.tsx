@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MenuArea.module.css";
 import { Dropdown, Menu, Tree } from "antd";
 import {
@@ -11,7 +11,7 @@ import {
 } from "../../features/editor/shaderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { activeTab, addTab } from "../../features/editor/tabSlice";
-import { treeData } from "./Data";
+import { filtTree, treeData } from "./Data";
 
 const { DirectoryTree } = Tree;
 
@@ -31,6 +31,7 @@ function getFilePath(name: string, type: ShaderType): string {
 function MenuArea() {
   const dispatch = useDispatch();
   const shaderTypeO = useSelector(globalShaderType);
+  const [search, setSearch] = useState("");
   const onSelect = (
     keys: React.Key[],
     { node }: any,
@@ -74,10 +75,23 @@ function MenuArea() {
       >
         Tutorials
       </div>
+      <div>
+        <input type="text" placeholder="Search" style={{
+          background: "#3c3c3c",
+          padding: "4px 8px",
+          outline: "none",
+          width: "100%",
+          border: 0,
+          fontSize: 12,
+          color: "#ccc"
+        }} onChange={(e) => {
+          setSearch(e.target.value);
+        }} value={search}></input>
+      </div>
       <DirectoryTree
         multiple
         defaultExpandAll
-        treeData={treeData}
+        treeData={filtTree(treeData, search)}
         onSelect={onSelect}
         titleRender={(node) => {
           if (!node.isLeaf) {
